@@ -60,6 +60,6 @@ def main():
         print("stocks fetch failed, keep last good:", e); return
     if old.get("date") and out["date"] and out["date"] < old["date"]: print("older than current, skip"); return
     out["updatedAt"] = now.isoformat(timespec="seconds")
-    json.dump(out, open("stocks.json", "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
+    json.dump(out, open("stocks.json.tmp", "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":")); os.replace("stocks.json.tmp", "stocks.json")
     print(f"stocks {out['mode']} {out['date']} {out['time']} n={len(out['s'])} q={sum(v[3] for v in out['s'].values())} {time.time()-t0:.0f}s {os.path.getsize('stocks.json')//1024}KB")
 if __name__ == "__main__": main()

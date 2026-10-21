@@ -60,6 +60,6 @@ def main():
     except Exception: old = {}
     if {k: v for k, v in old.items() if k != "fetchedAt"} == {k: v for k, v in out.items() if k != "fetchedAt"}:
         print("unchanged"); return
-    json.dump(out, open("data.json", "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    import os; json.dump(out, open("data.json.tmp", "w", encoding="utf-8"), ensure_ascii=False, indent=1); os.replace("data.json.tmp", "data.json")
     print("updated", out["mode"], out["dataTime"], out["index"])
 if __name__ == "__main__": main()
