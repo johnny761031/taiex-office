@@ -597,7 +597,7 @@ function like(el,s){LIKE[s.short]=(LIKE[s.short]||0)+1;const sp=el.querySelector
 function log(t,who){who=who||WN();const d=document.createElement("div");d.className="post";const tm=new Date().toLocaleTimeString("zh-TW",{hour:"2-digit",minute:"2-digit",hour12:false});
  const boss=who==BN(),mkt=who=="大盤";d.innerHTML=`<div class="pav ${boss?"b":mkt?"m":""}">${esc(who.slice(0,1))}</div><div class="pbody"><div class="phead"><b>${esc(who)}</b>${boss?'<span class="tag">老闆</span>':''} <span class="tm">${tm}</span></div><div>${t}</div><div class="pact">♡ 💬 ↻</div></div>`;$("log").prepend(d)}
 let liveOff=0,SHA=null;
-async function liveSha(){if(Date.now()<liveOff)return null;try{const r=await fetch("https://api.github.com/repos/johnny761031/taiex-office/commits/live",{headers:{Accept:"application/vnd.github.sha"},cache:"no-cache"});if(r.ok){SHA=(await r.text()).trim();return SHA}if(r.status==403||r.status==429)liveOff=Date.now()+600000}catch(e){}return null}
+async function liveSha(){if(Date.now()<liveOff)return null;try{const r=await fetch("https://api.github.com/repos/johnny761031/taiex-office/commits/live",{cache:"no-cache"});if(r.ok){SHA=(await r.json()).sha;return SHA}if(r.status==403||r.status==429)liveOff=Date.now()+600000}catch(e){}return null}
 const NEW={};function tsOf(j){return j?String(j.dataTime||((j.date||"")+" "+(j.time||""))||j.updatedAt||j.fetchedAt||""):""}
 async function getJ(f){const j=await getJ0(f),o=NEW[f];if(o&&tsOf(j)<tsOf(o))return o;NEW[f]=j;return j}
 async function getJ0(f){const s=SHA&&f=="stocks.json"?SHA:await liveSha();if(s&&/^[0-9a-f]{40}$/.test(s)){try{const r=await fetch(`https://raw.githubusercontent.com/johnny761031/taiex-office/${s}/${f}`);if(r.ok)return await r.json()}catch(e){}}
