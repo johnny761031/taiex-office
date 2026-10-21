@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>上班族離職衝動計｜加權指數版</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;background:linear-gradient(160deg,#fdf6e9,#f3e3cf);color:#3a2e28;min-height:100vh}
+header{text-align:center;padding:16px 10px 4px}h1{margin:0;font-size:2rem;color:#5b3a29;letter-spacing:1px}h1 span{color:#e53935}
+.sub{opacity:.75;font-size:.88rem;margin-top:4px}.sample{display:none;background:#c62828;color:#fff;padding:6px 12px;border-radius:6px;font-weight:bold;margin:8px auto;width:fit-content}
+.wrap{max-width:1180px;margin:auto;padding:10px;display:grid;grid-template-columns:2fr 1fr;gap:14px}
+.card{background:#fffdf8;border:1px solid #e6d5bf;border-radius:14px;padding:14px;box-shadow:0 4px 14px #8a5a3a1a}
+h2{font-size:1.05rem;margin:0 0 8px;color:#8a4b2a}
+#scene{position:relative;border-radius:14px;overflow:hidden;box-shadow:0 6px 20px #5b3a2933}#scene svg{display:block;width:100%;height:auto}
+.up{color:#e53935}.down{color:#2e9d4a}
+.meterbox{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.meter{flex:1;min-width:240px;height:26px;border-radius:14px;background:#eee3d3;border:2px solid #c8ab8c;overflow:hidden;position:relative}
+.meter .f{height:100%;width:0;background:linear-gradient(90deg,#66bb6a,#ffca28,#ff7043,#e53935);background-size:400px 100%;transition:width .8s cubic-bezier(.3,1.6,.5,1)}
+.meter .ticks{position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 calc(20% - 2px),#fff8 calc(20% - 2px) 20%)}
+.mv{font-size:1.7rem;font-weight:900;min-width:80px;text-align:right}
+.stage{font-size:1.1rem;font-weight:bold;padding:4px 12px;border-radius:20px;background:#5b3a29;color:#ffe082}
+.stages{display:flex;justify-content:space-between;font-size:.72rem;opacity:.7;margin-top:3px}
+.idx{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap}.idx .v{font-size:1.9rem;font-weight:900}
+.thoughts{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+.th{position:relative;background:#fff;border:2px solid #c8ab8c;border-radius:22px;padding:14px 10px 12px;text-align:center;cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:0 3px 0 #c8ab8c}
+.th:hover{transform:translateY(-4px) rotate(-1deg);box-shadow:0 7px 0 #c8ab8c}
+.th:after{content:"";position:absolute;left:24px;bottom:-12px;width:12px;height:12px;border-radius:50%;background:#fff;border:2px solid #c8ab8c}
+.th .r{font-size:.75rem;opacity:.7}.th .n{font-weight:900;font-size:1.02rem;margin:4px 0;line-height:1.4}.th .p{font-weight:bold}
+button.auto{margin-top:14px;padding:9px 18px;border-radius:20px;border:0;background:#5b3a29;color:#ffe082;font-weight:bold;cursor:pointer;font-size:.95rem}
+#log{height:320px;overflow-y:auto;font-size:.87rem;line-height:1.6}#log div{border-bottom:1px dashed #e6d5bf;padding:3px 0}
+.rule{font-size:.84rem;line-height:1.75}
+table{width:100%;border-collapse:collapse;font-size:.84rem}td,th.t{padding:4px 6px;border-bottom:1px solid #efe3d2;text-align:left}td.n{text-align:right;font-variant-numeric:tabular-nums}
+tr.top td{background:#fff3cd;font-weight:bold}tr.row{cursor:pointer}tr.row:hover td{background:#fbeee0}.bw{height:8px;border-radius:4px;display:inline-block;vertical-align:middle}
+footer{text-align:center;font-size:.78rem;opacity:.6;padding:16px}
+/* scene animation */
+.steam path{animation:steam 3s ease-in-out infinite;opacity:0}.steam path:nth-child(2){animation-delay:1s}.steam path:nth-child(3){animation-delay:2s}
+@keyframes steam{0%{opacity:0;transform:translateY(6px)}40%{opacity:.7}100%{opacity:0;transform:translateY(-22px)}}
+.plant{transform-origin:78px 300px;animation:sway 4s ease-in-out infinite}@keyframes sway{50%{transform:rotate(2.5deg)}}
+.clockhand{transform-origin:600px 70px;animation:spin 8s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.cursor{animation:blink 1s steps(1) infinite}@keyframes blink{50%{opacity:0}}
+.kl{stroke-dasharray:700;stroke-dashoffset:700;animation:draw 3s ease-out forwards infinite alternate}@keyframes draw{to{stroke-dashoffset:0}}
+#worker .work,#worker .dream{transition:opacity .5s}
+#worker.isWork .dream{opacity:0}#worker.isDream .work{opacity:0}
+#worker.isWork .handL{animation:typeL .25s infinite alternate}#worker.isWork .handR{animation:typeR .25s infinite alternate .12s}
+@keyframes typeL{to{transform:translateY(-4px)}}@keyframes typeR{to{transform:translateY(-4px)}}
+#worker.isWork .head{animation:nod 2.5s ease-in-out infinite;transform-origin:330px 205px}@keyframes nod{50%{transform:rotate(3deg)}}
+#worker.isDream .dream .headD{animation:dream 3s ease-in-out infinite;transform-origin:325px 200px}@keyframes dream{50%{transform:rotate(-6deg)}}
+#worker.sigh .sighpuff{animation:sigh 1.4s ease-out}.sighpuff{opacity:0}@keyframes sigh{0%{opacity:0;transform:translate(0,0)}30%{opacity:1}100%{opacity:0;transform:translate(-30px,-20px) scale(1.4)}}
+#boss{transform:translateX(260px);transition:transform .45s cubic-bezier(.3,1.5,.5,1)}#boss.in{transform:translateX(0)}
+#boss.in .bossArm{animation:point .3s infinite alternate;transform-origin:640px 230px}@keyframes point{to{transform:rotate(-8deg)}}
+#bossBubble{opacity:0;transition:opacity .2s}#boss.in #bossBubble{opacity:1}
+.letter,.box,.phoneGlow{transition:opacity .6s,transform .6s}
+.bubble{position:absolute;pointer-events:none;background:#fff;border:2px solid #5b3a29;border-radius:18px;padding:6px 12px;font-weight:bold;font-size:.95rem;white-space:nowrap;animation:floatUp 2.6s ease-out forwards;box-shadow:0 3px 0 #5b3a29}
+@keyframes floatUp{0%{opacity:0;transform:translate(-50%,10px) scale(.6)}15%{opacity:1;transform:translate(-50%,0) scale(1)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-110px) scale(1)}}
+.shake{animation:shake .4s}@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@media(max-width:860px){.wrap{grid-template-columns:1fr}.thoughts{grid-template-columns:1fr}}
+#panel{display:grid;grid-template-columns:1fr 1fr;gap:14px}.pcol{background:#fbf4ea;border-radius:12px;padding:10px 14px}.pcol h3{margin:0 0 6px;font-size:1rem;color:#5b3a29}
+.pcol label{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px dashed #e6d5bf;font-size:.9rem}.pcol select,.pcol input[type=text]{padding:4px 6px;border-radius:6px;border:1px solid #c8ab8c;background:#fff;font:inherit;min-width:120px}.pcol input[type=color]{width:60px;height:28px;border:0;background:none}
+@media(max-width:860px){#panel{grid-template-columns:1fr}}
+#worker .head,#worker .headD{transform-box:fill-box;transform-origin:50% 85%!important}
+@media(max-width:600px){h1{font-size:1.35rem}.wrap{padding:6px;gap:10px}.wrap>*{min-width:0}.card{padding:10px}.meter{min-width:0}.meterbox{flex-wrap:nowrap}.mv{font-size:1.3rem;min-width:50px}.stages{font-size:.6rem}
+.bubble{font-size:.75rem;white-space:normal;max-width:80%;text-align:center;padding:4px 8px}.idx .v{font-size:1.4rem}
+table{font-size:.72rem}td:nth-child(3),th:nth-child(3),td:nth-child(6),th:nth-child(6){display:none}.pcol select,.pcol input[type=text]{min-width:0;max-width:55%}#log{height:220px}}
+</style></head><body>
+<header><h1>💼 上班族<span>離職衝動計</span>｜加權指數版</h1><div class="sub" id="sub">載入資料中…</div><div class="sample" id="sample">⚠️ 範例資料（非真實行情，資料載入失敗）</div></header>
+<div class="wrap">
+<div>
+ <div id="scene">
+ <svg viewBox="0 0 800 440" id="svg">
+  <defs>
+   <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7ead6"/><stop offset="1" stop-color="#ead2b4"/></linearGradient>
+   <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b98a62"/><stop offset="1" stop-color="#8a5f3e"/></linearGradient>
+   <linearGradient id="desk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d9a877"/><stop offset="1" stop-color="#a8744a"/></linearGradient>
+   <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#90caf9"/><stop offset="1" stop-color="#e3f2fd"/></linearGradient>
+   <linearGradient id="screen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c2541"/><stop offset="1" stop-color="#0b132b"/></linearGradient>
+   <linearGradient id="shirt" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e3f2fd"/><stop offset="1" stop-color="#90a4ae"/></linearGradient>
+   <linearGradient id="suit" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#546e7a"/><stop offset="1" stop-color="#263238"/></linearGradient>
+   <radialGradient id="skin" cx=".4" cy=".35"><stop offset="0" stop-color="#ffe3c4"/><stop offset="1" stop-color="#e8b088"/></radialGradient>
+   <radialGradient id="glow"><stop offset="0" stop-color="#ffeb3b" stop-opacity=".8"/><stop offset="1" stop-color="#ffeb3b" stop-opacity="0"/></radialGradient>
+   <filter id="sh" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="3" stdDeviation="3" flood-opacity=".25"/></filter>
+  </defs>
+  <rect width="800" height="440" fill="url(#wall)"/>
+  <rect y="330" width="800" height="110" fill="url(#floor)"/>
+  <!-- window with city -->
+  <g filter="url(#sh)"><rect x="40" y="30" width="200" height="150" rx="6" fill="url(#sky)" stroke="#8d6e63" stroke-width="6"/>
+  <path d="M50 175 v-60 h25 v-25 h20 v85 M110 175 v-90 h30 v90 M150 175 v-50 h22 v-20 h18 v70 M196 175 v-75 h34 v75" fill="#90a4ae" opacity=".8"/>
+  <path d="M140 30 v150 M40 105 h200" stroke="#8d6e63" stroke-width="4"/><text x="196" y="72" font-size="14" fill="#fff" opacity=".9">101</text></g>
+  <!-- clock -->
+  <g filter="url(#sh)"><circle cx="600" cy="70" r="34" fill="#fff" stroke="#5b3a29" stroke-width="5"/><path d="M600 70 v-20" stroke="#5b3a29" stroke-width="4" stroke-linecap="round"/><path class="clockhand" d="M600 70 h22" stroke="#e53935" stroke-width="3" stroke-linecap="round"/><circle cx="600" cy="70" r="3" fill="#5b3a29"/></g>
+  <!-- poster -->
+  <g transform="rotate(-3 420 80)" filter="url(#sh)"><rect x="350" y="40" width="140" height="80" fill="#fff8e1" stroke="#c8ab8c" stroke-width="2"/><text x="420" y="72" text-anchor="middle" font-size="17" font-weight="900" fill="#c62828">KPI 是生命</text><text x="420" y="98" text-anchor="middle" font-size="12" fill="#5b3a29">準時下班是傳說</text></g>
+  <!-- plant -->
+  <g class="plant"><path d="M78 300 C60 250 40 240 30 230 C55 235 70 250 78 280 C80 240 70 215 82 195 C90 225 88 255 82 290 C95 260 110 250 130 248 C110 262 95 280 84 300Z" fill="#43a047" stroke="#1b5e20" stroke-width="2"/></g>
+  <path d="M55 295 h50 l-6 40 h-38Z" fill="#d84315" stroke="#5b2a10" stroke-width="2"/>
+  <!-- chair back -->
+  <path d="M265 230 q-10 60 0 110 h40 q8 -50 0 -110Z" fill="#37474f"/>
+  <!-- WORKER -->
+  <g id="worker" class="isWork"></g>
+  <!-- DESK -->
+  <path d="M190 300 h420 v14 h-420Z" fill="url(#desk)" stroke="#6d4325" stroke-width="2" filter="url(#sh)"/>
+  <path d="M205 314 v100 h16 v-100Z M580 314 v100 h16 v-100Z" fill="#8a5f3e"/>
+  <!-- monitor -->
+  <g filter="url(#sh)"><rect x="410" y="170" width="170" height="112" rx="8" fill="#263238"/><rect x="418" y="178" width="154" height="94" rx="3" fill="url(#screen)"/>
+   <path d="M482 282 h26 l6 18 h-38Z" fill="#455a64"/>
+   <g id="candles"></g>
+   <polyline id="kline" class="kl" fill="none" stroke-width="2.5" points=""/>
+   <text id="scrTxt" x="424" y="192" font-size="10" fill="#fff" font-family="monospace">TAIEX</text>
+   <rect class="cursor" x="424" y="262" width="6" height="2" fill="#fff"/></g>
+  <!-- keyboard -->
+  <path d="M385 292 h100 l6 8 h-112Z" fill="#cfd8dc" stroke="#78909c"/>
+  <!-- coffee -->
+  <g filter="url(#sh)"><path d="M232 270 h30 l-3 30 h-24Z" fill="#fff" stroke="#8a5a3a" stroke-width="2"/><path d="M262 276 q12 2 0 16" stroke="#8a5a3a" stroke-width="3" fill="none"/><rect x="236" y="280" width="22" height="6" fill="#6d4c41"/><text x="247" y="296" text-anchor="middle" font-size="7" fill="#6d4c41">續命</text></g>
+  <g class="steam" stroke="#9e9e9e" stroke-width="2" fill="none"><path d="M240 265 q-4 -8 0 -14 q4 -6 0 -12"/><path d="M248 265 q-4 -8 0 -14 q4 -6 0 -12"/><path d="M256 265 q-4 -8 0 -14 q4 -6 0 -12"/></g>
+  <!-- paper stack (work) -->
+  <g id="plate"></g><g id="papers"><rect x="280" y="276" width="48" height="24" fill="#fff" stroke="#bbb"/><rect x="284" y="270" width="48" height="8" fill="#fafafa" stroke="#bbb"/><text x="290" y="292" font-size="9" fill="#c62828">急件!!</text></g>
+  <!-- resignation letter -->
+  <g class="letter" id="letter" opacity="0" transform="translate(0,10)"><rect x="440" y="262" width="46" height="34" fill="#fff" stroke="#c62828" stroke-width="2" transform="rotate(8 463 279)"/><text x="463" y="284" text-anchor="middle" font-size="13" font-weight="900" fill="#c62828" transform="rotate(8 463 279)">辭呈</text></g>
+  <!-- moving box -->
+  <g class="box" id="box" opacity="0"><path d="M640 330 h80 v-60 h-80Z" fill="#d7a86e" stroke="#7a5230" stroke-width="2"/><path d="M640 270 l-14 -16 h80 l14 16" fill="#e8c08e" stroke="#7a5230" stroke-width="2"/><text x="680" y="308" text-anchor="middle" font-size="13" font-weight="900" fill="#7a5230">私人物品</text><text x="660" y="268" font-size="18">🪴</text></g>
+  <!-- BOSS -->
+  <g id="boss"><g id="bossBody"></g>
+   <g id="bossBubble"><path d="M470 110 h220 a14 14 0 0 1 14 14 v40 a14 14 0 0 1 -14 14 h-70 l-14 18 l-4 -18 h-132 a14 14 0 0 1 -14 -14 v-40 a14 14 0 0 1 14 -14Z" fill="#fff" stroke="#b71c1c" stroke-width="3"/>
+   <text id="bossWho" x="486" y="128" font-size="11" font-weight="bold" fill="#7f0000"></text><text id="bossTxt" x="580" y="150" text-anchor="middle" font-size="15" font-weight="900" fill="#b71c1c"></text></g>
+  </g>
+ </svg>
+ </div>
+ <div class="card" style="margin-top:14px">
+  <div class="meterbox"><b>🔥 離職衝動值</b><div class="meter"><div class="f" id="mf"></div><div class="ticks"></div></div><div class="mv" id="mv">0%</div></div>
+  <div class="stages"><span>乖乖搬磚</span><span>摸魚中</span><span>蓄勢待發</span><span>辭呈已寫好</span><span>我要當全職股神</span></div>
+  <div style="text-align:center;margin-top:8px">目前狀態：<span class="stage" id="stage">—</span></div>
+ </div>
+ <div class="card" style="margin-top:14px">
+  <div class="idx"><div><div style="opacity:.7">發行量加權股價指數</div><div class="v" id="iv">—</div></div><div class="v" id="ic">—</div></div>
+  <h2 style="margin-top:12px">💭 今日三大離職念頭（漲幅前三類股，點我觸發）</h2><div class="thoughts" id="thoughts"></div>
+  <div style="text-align:center"><button class="auto" id="auto">▶ 自動內心戲</button> <button class="auto" id="reset" style="background:#a1887f;color:#fff">↺ 回到開盤狀態</button></div>
+ </div>
+</div>
+<div>
+ <div class="card"><h2>🎭 內心小劇場</h2><div id="log"></div></div>
+ <div class="card" style="margin-top:14px"><h2>📖 衝動值怎麼算</h2><div class="rule" id="rule"></div></div>
+</div>
+<div class="card" style="grid-column:1/-1"><h2>🎨 角色設定 <button class="auto" id="rand" style="margin:0 0 0 10px;padding:5px 14px;font-size:.85rem">🎲 隨機造型</button> <button class="auto" id="def" style="margin:0;padding:5px 14px;font-size:.85rem;background:#a1887f;color:#fff">恢復預設</button></h2><div id="panel"></div><div style="font-size:.75rem;opacity:.6;margin-top:6px">設定會自動存在這台裝置的瀏覽器（localStorage）。</div></div>
+<div class="card" style="grid-column:1/-1"><h2>🗂️ 全部離職念頭（上市類股指數漲跌，點任一列觸發）</h2><table id="tbl"></table></div>
+</div>
+<footer id="foot"></footer>
+<script>window.TAIEX_DATA={
+ "source": "臺灣證券交易所 MI_INDEX",
+ "sourceUrl": "https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&type=IND&date=20261020",
+ "title": "115年10月20日 價格指數(臺灣證券交易所)",
+ "date": "2026-10-20",
+ "fetchedAt": "2026-10-21T10:01:25",
+ "isSample": false,
+ "index": {
+  "name": "發行量加權股價指數",
+  "close": 46292.93,
+  "change": -529.15,
+  "pct": -1.13
+ },
+ "sectors": [
+  {
+   "name": "玻璃陶瓷類指數",
+   "close": 158.16,
+   "change": 3.36,
+   "pct": 2.17,
+   "short": "玻璃陶瓷"
+  },
+  {
+   "name": "電腦及週邊設備類指數",
+   "close": 451.3,
+   "change": 5.95,
+   "pct": 1.34,
+   "short": "電腦及週邊設備"
+  },
+  {
+   "name": "資訊服務類指數",
+   "close": 244.92,
+   "change": 1.02,
+   "pct": 0.42,
+   "short": "資訊服務"
+  },
+  {
+   "name": "化學類指數",
+   "close": 197.37,
+   "change": 0.38,
+   "pct": 0.19,
+   "short": "化學"
+  },
+  {
+   "name": "數位雲端類指數",
+   "close": 39.86,
+   "change": 0.02,
+   "pct": 0.05,
+   "short": "數位雲端"
+  },
+  {
+   "name": "其他電子類指數",
+   "close": 264.5,
+   "change": -0.18,
+   "pct": -0.07,
+   "short": "其他電子"
+  },
+  {
+   "name": "運動休閒類指數",
+   "close": 56.26,
+   "change": -0.19,
+   "pct": -0.34,
+   "short": "運動休閒"
+  },
+  {
+   "name": "觀光餐旅類指數",
+   "close": 102.87,
+   "change": -0.36,
+   "pct": -0.35,
+   "short": "觀光餐旅"
+  },
+  {
+   "name": "紡織纖維類指數",
+   "close": 483.99,
+   "change": -2.14,
+   "pct": -0.44,
+   "short": "紡織纖維"
+  },
+  {
+   "name": "鋼鐵類指數",
+   "close": 124.89,
+   "change": -0.64,
+   "pct": -0.51,
+   "short": "鋼鐵"
+  },
+  {
+   "name": "其他類指數",
+   "close": 273.97,
+   "change": -1.49,
+   "pct": -0.54,
+   "short": "其他"
+  },
+  {
+   "name": "橡膠類指數",
+   "close": 197.07,
+   "change": -1.09,
+   "pct": -0.55,
+   "short": "橡膠"
+  },
+  {
+   "name": "電子通路類指數",
+   "close": 372.4,
+   "change": -2.23,
+   "pct": -0.6,
+   "short": "電子通路"
+  },
+  {
+   "name": "水泥類指數",
+   "close": 131.43,
+   "change": -0.84,
+   "pct": -0.64,
+   "short": "水泥"
+  },
+  {
+   "name": "通信網路類指數",
+   "close": 244.64,
+   "change": -1.69,
+   "pct": -0.69,
+   "short": "通信網路"
+  },
+  {
+   "name": "生技醫療類指數",
+   "close": 87.6,
+   "change": -0.66,
+   "pct": -0.75,
+   "short": "生技醫療"
+  },
+  {
+   "name": "建材營造類指數",
+   "close": 441.19,
+   "change": -3.61,
+   "pct": -0.81,
+   "short": "建材營造"
+  },
+  {
+   "name": "居家生活類指數",
+   "close": 96.99,
+   "change": -0.86,
+   "pct": -0.88,
+   "short": "居家生活"
+  },
+  {
+   "name": "半導體類指數",
+   "close": 1537.55,
+   "change": -14.61,
+   "pct": -0.94,
+   "short": "半導體"
+  },
+  {
+   "name": "貿易百貨類指數",
+   "close": 243.18,
+   "change": -2.31,
+   "pct": -0.94,
+   "short": "貿易百貨"
+  },
+  {
+   "name": "綠能環保類指數",
+   "close": 123.13,
+   "change": -1.17,
+   "pct": -0.94,
+   "short": "綠能環保"
+  },
+  {
+   "name": "航運類指數",
+   "close": 216.35,
+   "change": -2.19,
+   "pct": -1.0,
+   "short": "航運"
+  },
+  {
+   "name": "汽車類指數",
+   "close": 292.99,
+   "change": -3.06,
+   "pct": -1.03,
+   "short": "汽車"
+  },
+  {
+   "name": "電器電纜類指數",
+   "close": 106.3,
+   "change": -1.37,
+   "pct": -1.27,
+   "short": "電器電纜"
+  },
+  {
+   "name": "食品類指數",
+   "close": 1928.86,
+   "change": -25.2,
+   "pct": -1.29,
+   "short": "食品"
+  },
+  {
+   "name": "電機機械類指數",
+   "close": 517.0,
+   "change": -7.53,
+   "pct": -1.44,
+   "short": "電機機械"
+  },
+  {
+   "name": "造紙類指數",
+   "close": 271.31,
+   "change": -4.5,
+   "pct": -1.63,
+   "short": "造紙"
+  },
+  {
+   "name": "光電類指數",
+   "close": 75.02,
+   "change": -1.32,
+   "pct": -1.73,
+   "short": "光電"
+  },
+  {
+   "name": "電子零組件類指數",
+   "close": 899.39,
+   "change": -20.27,
+   "pct": -2.2,
+   "short": "電子零組件"
+  },
+  {
+   "name": "金融保險類指數",
+   "close": 3627.32,
+   "change": -87.79,
+   "pct": -2.36,
+   "short": "金融保險"
+  },
+  {
+   "name": "塑膠類指數",
+   "close": 468.54,
+   "change": -12.79,
+   "pct": -2.66,
+   "short": "塑膠"
+  },
+  {
+   "name": "油電燃氣類指數",
+   "close": 138.96,
+   "change": -11.2,
+   "pct": -7.46,
+   "short": "油電燃氣"
+  }
+ ]
+};
+
+/* ===== 角色引擎（SVG 參數化繪製） ===== */
+const SKINS={"白皙":["#fde7d6","#e9b99a"],"自然":["#f6d3b3","#d79e78"],"小麥":["#e0ac7e","#b07a50"],"古銅":["#b9825a","#8a5634"],"深色":["#8d5a3b","#5e3820"]};
+const HAIRC={"黑色":"#1d1714","深棕":"#4a2f21","栗棕":"#7a4a2a","亞麻金":"#c9a063","酒紅":"#7b2333","灰白":"#b9b6b0","霧藍":"#4f6d8f"};
+const HAIR_W={"男生":["短髮","旁分油頭","刺蝟頭","中長髮"],"女生":["長直髮","馬尾","鮑伯頭","丸子頭","大波浪"]};
+const HAIR_B={"男生":["短髮","旁分油頭","光頭","地中海","刺蝟頭"],"女生":["鮑伯頭","盤髮","長直髮","短髮"]};
+const OUTFITS=["襯衫領帶","帽T","西裝外套","洋裝","POLO衫"];
+const ACCS=["無","耳機","護身符","識別證","耳環","髮夾"];
+const BODY=["瘦","標準","壯碩"];
+const TONES={"嚴厲":["{w}！{s}跌了你還敢滑手機？","{w}，你的報告呢？明早九點放我桌上！","{s}跌了你還有心情看盤？報告呢！","上班時間滑手機？績效考核見！","{s}都跌了，你的年終也會跌，懂？","我數到三，螢幕切回 Excel！"],
+"嘮叨":["{w}啊，我不是要念你，但是{s}都跌了…","{w}你知道嗎，我跟你這年紀的時候早就升主管了","我跟你說喔，{s}跌就是因為大家不認真…","你看看隔壁小陳，人家從來不看盤欸","我年輕的時候啊，一天工作十六小時…","{s}跌成這樣，你還不快點把報表做完？"],
+"暴怒":["{w}！！！給我進來！！！","{w}你再看盤一次試試看！！","你給我站起來！！{s}都跌了你還笑？！","滑什麼手機！！我要扣你考績！！","{s}崩了你也想崩是不是？！","會議室！現在！馬上！！"],
+"陰陽怪氣":["{w}好厲害喔～上班時間還能顧{s}","哎呀{w}，股神也要交週報喔～","哇～{s}跌了，你應該很閒吧？","不錯嘛，上班時間研究{s}，真是投資高手呢","沒關係，你慢慢看，報告我自己做就好～","喔～原來你的本業是股神啊？"]};
+const DEF={worker:{gender:"女生",hair:"長直髮",hairColor:"深棕",skin:"自然",outfit:"西裝外套",outfitColor:"#3f6fb5",glasses:false,acc:"耳機",wname:"小美",wtitle:"資深專員"},
+ boss:{gender:"男生",hair:"地中海",hairColor:"黑色",skin:"小麥",suit:"#2f3b46",glasses:true,body:"壯碩",surname:"王",given:"大同",btitle:"經理",tone:"嚴厲"}};
+let CFG=JSON.parse(JSON.stringify(DEF));
+try{const s=JSON.parse(localStorage.getItem("officeCfg"));if(s&&s.boss&&s.boss.name&&!s.boss.surname){s.boss.surname=s.boss.name.slice(0,1);s.boss.btitle=s.boss.name.slice(1)||"經理";s.boss.given=""}if(s&&s.worker&&s.boss)CFG={worker:{...DEF.worker,...s.worker},boss:{...DEF.boss,...s.boss}}}catch(e){}
+const WN=()=>(CFG.worker.wname||"").trim()||"同事";const BN=()=>((CFG.boss.surname||"").trim()+((CFG.boss.btitle||"").trim()||"老闆"));const BFULL=()=>((CFG.boss.surname||"")+(CFG.boss.given||"")).trim();
+function shade(h,p){let n=parseInt(h.slice(1),16),r=n>>16,g=n>>8&255,b=n&255;const f=v=>Math.max(0,Math.min(255,Math.round(p<0?v*(1+p/100):v+(255-v)*p/100)));return"#"+[f(r),f(g),f(b)].map(v=>v.toString(16).padStart(2,"0")).join("")}
+let UID=0;
+function hairBack(st,c){const d=shade(c,-25);switch(st){
+ case"長直髮":return`<path d="M-27 -8 C-31 -42 31 -42 27 -8 C30 18 31 40 34 58 C14 64 -14 64 -34 58 C-31 40 -30 18 -27 -8Z" fill="${d}"/>`;
+ case"大波浪":return`<path d="M-27 -8 C-33 -44 33 -44 27 -8 C38 10 30 26 38 40 C34 56 22 60 10 58 L-10 58 C-22 60 -36 56 -38 40 C-30 26 -38 10 -27 -8Z" fill="${d}"/>`;
+ case"鮑伯頭":return`<path d="M-27 -8 C-31 -42 31 -42 27 -8 C29 6 30 16 28 22 C18 26 -18 26 -28 22 C-30 16 -29 6 -27 -8Z" fill="${d}"/>`;
+ case"馬尾":return`<path d="M18 -26 C40 -28 44 0 36 30 C34 44 26 52 22 56 C26 36 30 14 18 -6Z" fill="${d}"/>`;
+ case"丸子頭":case"盤髮":return`<circle cx="${st=="盤髮"?14:0}" cy="${st=="盤髮"?-24:-36}" r="${st=="盤髮"?11:12}" fill="${d}"/>`;
+ case"中長髮":return`<path d="M-26 -8 C-30 -40 30 -40 26 -8 C28 6 28 14 25 20 L-25 20 C-28 14 -28 6 -26 -8Z" fill="${d}"/>`;
+ default:return""}}
+function hairFront(st,c){const h=shade(c,30),d=shade(c,-20);const hl=`<path d="M-12 -26 Q0 -31 12 -27" stroke="${h}" stroke-width="2.2" fill="none" opacity=".7"/>`;switch(st){
+ case"光頭":return`<ellipse cx="-6" cy="-22" rx="8" ry="4" fill="#fff" opacity=".35"/>`;
+ case"地中海":return`<path d="M-24 -2 C-26 -14 -22 -20 -18 -18 C-16 -10 -18 -4 -20 4Z M24 -2 C26 -14 22 -20 18 -18 C16 -10 18 -4 20 4Z" fill="${c}"/><path d="M-14 -24 Q0 -30 12 -22 M-12 -21 Q2 -27 14 -19" stroke="${c}" stroke-width="1.4" fill="none"/><ellipse cx="-4" cy="-24" rx="9" ry="3.5" fill="#fff" opacity=".35"/>`;
+ case"刺蝟頭":return`<path d="M-24 -4 L-27 -20 L-18 -22 L-20 -36 L-8 -28 L-4 -42 L4 -30 L12 -40 L14 -27 L25 -32 L21 -18 L26 -6 C20 -16 8 -20 0 -18 C-10 -20 -18 -14 -24 -4Z" fill="${c}"/>${hl}`;
+ case"旁分油頭":return`<path d="M-24 -2 C-27 -38 27 -40 25 -2 C23 -14 16 -24 -4 -22 C-14 -20 -20 -12 -24 -2Z" fill="${c}"/><path d="M-6 -36 Q-8 -28 -4 -22" stroke="${d}" stroke-width="1.5" fill="none"/><path d="M0 -34 Q14 -32 20 -20" stroke="${h}" stroke-width="2" fill="none" opacity=".8"/>`;
+ case"中長髮":return`<path d="M-25 2 C-28 -38 28 -40 25 2 C22 -10 18 -16 12 -18 Q4 -10 -4 -18 Q-12 -10 -20 -14 C-22 -8 -24 -4 -25 2Z" fill="${c}"/>${hl}`;
+ case"長直髮":case"大波浪":return`<path d="M-26 6 C-30 -40 30 -40 26 6 C24 -6 22 -14 16 -18 C6 -14 -6 -22 -14 -12 C-20 -10 -24 -4 -26 6Z" fill="${c}"/>${hl}<path d="M-24 0 Q-27 24 -22 44" stroke="${h}" stroke-width="1.6" fill="none" opacity=".5"/>`;
+ case"鮑伯頭":return`<path d="M-27 20 C-32 -40 32 -40 27 20 C24 10 24 0 22 -10 C14 -16 -2 -18 -12 -14 L-20 -12 C-24 0 -24 10 -27 20Z" fill="${c}"/>${hl}`;
+ case"馬尾":case"丸子頭":case"盤髮":return`<path d="M-24 -2 C-27 -38 27 -40 24 -2 C22 -14 14 -22 2 -22 C-8 -22 -18 -14 -24 -2Z" fill="${c}"/>${hl}${st=="馬尾"?`<rect x="15" y="-22" width="7" height="6" rx="2" fill="#e53935" transform="rotate(30 18 -19)"/>`:""}`;
+ default:return`<path d="M-24 -2 C-27 -38 27 -40 24 -2 C21 -14 12 -20 0 -19 C-12 -20 -21 -14 -24 -2Z" fill="${c}"/>${hl}`}}
+function eye(x,y,ex,fem,iris){if(ex=="happy")return`<path d="M${x-6} ${y+1} Q${x} ${y-5} ${x+6} ${y+1}" stroke="#2a1a14" stroke-width="2" fill="none" stroke-linecap="round"/>${fem?`<path d="M${x+(x<0?-6:6)} ${y+1} l${x<0?-3:3} -2" stroke="#2a1a14" stroke-width="1.5"/>`:""}`;
+ const look=ex=="down"?2:0,lid=ex=="down"?`<path d="M${x-6.5} ${y} Q${x} ${y-6} ${x+6.5} ${y} L${x+6.5} ${y-0.5} Q${x} ${y-1} ${x-6.5} ${y-0.5}Z" fill="#00000022"/>`:"";
+ const ang=ex=="angry";
+ return`<path d="M${x-6} ${y} Q${x} ${y-5} ${x+6} ${y} Q${x} ${y+4} ${x-6} ${y}Z" fill="#fbfbf8"/><circle cx="${x}" cy="${y+look*.5}" r="${ang?2.6:3.2}" fill="${iris}"/><circle cx="${x}" cy="${y+look*.5}" r="1.5" fill="#111"/><circle cx="${x+1.1}" cy="${y-1+look*.5}" r=".9" fill="#fff"/>${lid}
+ <path d="M${x-6.5} ${y} Q${x} ${y-5.5} ${x+6.5} ${y}" stroke="#2a1a14" stroke-width="${fem?2.3:1.5}" fill="none" stroke-linecap="round"/>${fem?`<path d="M${x+(x<0?-6.5:6.5)} ${y} l${x<0?-2.5:2.5} -2.5" stroke="#2a1a14" stroke-width="1.4"/>`:""}<path d="M${x-4} ${y+3.2} Q${x} ${y+4.4} ${x+4} ${y+3.2}" stroke="#00000022" stroke-width="1" fill="none"/>`}
+function head(p,ex,o={}){const id="h"+(UID++),[sk,sd]=SKINS[p.skin]||SKINS["自然"],hc=HAIRC[p.hairColor]||p.hairColor,fem=p.gender=="女生",bc=shade(hc,-10);
+ const brow=(x)=>{const y=-11;if(ex=="angry")return`<path d="M${x-7} ${y-(x<0?3:-2)} L${x+7} ${y+(x<0?2:-3)}" stroke="${bc}" stroke-width="${fem?2.2:3.2}" stroke-linecap="round"/>`;return`<path d="M${x-7} ${y+1} Q${x} ${y-(ex=="happy"?4:2.5)} ${x+7} ${y+1}" stroke="${bc}" stroke-width="${fem?1.7:2.6}" fill="none" stroke-linecap="round"/>`};
+ const lip=fem?"#c4505f":shade(sd,-15);
+ const mouth={focus:`<path d="M-5 16 Q0 17.2 5 16" stroke="${lip}" stroke-width="1.8" fill="none" stroke-linecap="round"/>${fem?`<path d="M-4 17 Q0 19 4 17" stroke="${lip}" stroke-width="1.2" fill="none" opacity=".6"/>`:""}`,
+  happy:`<path d="M-8 14 Q0 23 8 14 Q0 17 -8 14Z" fill="#8e2b38" stroke="${lip}" stroke-width="1.4"/><path d="M-6 14.8 Q0 17 6 14.8 L5 16.4 Q0 17.6 -5 16.4Z" fill="#fff"/>`,
+  angry:`<ellipse cx="0" cy="17" rx="7.5" ry="6" fill="#5d1018" stroke="${lip}" stroke-width="1.4"/><path d="M-6 13.5 Q0 12 6 13.5 L6 15 L-6 15Z" fill="#fff"/><ellipse cx="0" cy="20" rx="4" ry="2" fill="#c2405a"/>`,
+  down:`<path d="M-5 16.5 Q0 15.5 5 16.5" stroke="${lip}" stroke-width="1.8" fill="none" stroke-linecap="round"/>`}[ex];
+ const iris=p.hairColor=="霧藍"?"#3a5f8a":"#4a2c1d";
+ let acc="";const a=p.acc;
+ if(a=="耳機")acc+=`<path d="M-27 2 C-30 -44 30 -44 27 2" stroke="#222" stroke-width="4" fill="none"/><rect x="-31" y="-4" width="8" height="15" rx="4" fill="#333"/><rect x="23" y="-4" width="8" height="15" rx="4" fill="#333"/><circle cx="27" cy="3" r="2" fill="#4dd0e1"/>`;
+ if(a=="耳環")acc+=`<circle cx="-23" cy="9" r="2.4" fill="#ffd54a" stroke="#b8860b"/><circle cx="23" cy="9" r="2.4" fill="#ffd54a" stroke="#b8860b"/>`;
+ if(a=="髮夾")acc+=`<path d="M8 -24 l12 -4 l1 4 l-12 4Z" fill="#ff7aa8" stroke="#c2185b"/>`;
+ const gl=p.glasses?`<g fill="#ffffff22" stroke="#2b2b2b" stroke-width="1.6"><rect x="-16" y="-7" width="13" height="10" rx="3.5"/><rect x="3" y="-7" width="13" height="10" rx="3.5"/><path d="M-3 -3 Q0 -5 3 -3 M-16 -4 L-22 -5 M16 -4 L22 -5" fill="none"/></g><path d="M-14 -5 l4 -1" stroke="#fff" stroke-width="1.2" opacity=".7"/>`:"";
+ return`<defs><radialGradient id="${id}f" cx=".42" cy=".38" r=".7"><stop offset="0" stop-color="${shade(sk,12)}"/><stop offset=".7" stop-color="${sk}"/><stop offset="1" stop-color="${sd}"/></radialGradient>
+ <linearGradient id="${id}n" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${sd}"/><stop offset="1" stop-color="${sk}"/></linearGradient></defs>
+ ${hairBack(p.hair,hc)}
+ <path d="M-8 18 L-9 40 Q0 44 9 40 L8 18Z" fill="url(#${id}n)"/>
+ <ellipse cx="-22" cy="3" rx="4.5" ry="7" fill="${sd}"/><ellipse cx="22" cy="3" rx="4.5" ry="7" fill="${sd}"/>
+ <path d="M-22 -6 C-23 -32 23 -32 22 -6 C22 ${fem?10:13} ${fem?11:14} ${fem?26:27} 0 ${fem?29:30} C${fem?-11:-14} ${fem?26:27} -22 ${fem?10:13} -22 -6Z" fill="url(#${id}f)" stroke="${shade(sd,-15)}" stroke-width=".8"/>
+ <path d="M-20 6 C-18 18 -8 27 0 29 C-6 24 -14 16 -20 6Z" fill="${sd}" opacity=".35"/>
+ ${p.gender=="男生"&&o.stubble?`<path d="M-15 14 C-10 26 10 26 15 14 C10 22 -10 22 -15 14Z" fill="#00000018"/>`:""}
+ ${brow(-9)}${brow(9)}${eye(-9,-1,ex,fem,iris)}${eye(9,-1,ex,fem,iris)}
+ <path d="M0 0 Q-3 8 -1.5 9.5 Q1 11 3.5 9.5" stroke="${shade(sd,-12)}" stroke-width="1.3" fill="none" stroke-linecap="round"/><path d="M1 1 L1.5 7" stroke="#fff" stroke-width="1" opacity=".35"/>
+ <ellipse cx="-13" cy="8" rx="5" ry="3" fill="#ff6b7a" opacity="${fem?.28:.12}"/><ellipse cx="13" cy="8" rx="5" ry="3" fill="#ff6b7a" opacity="${fem?.28:.12}"/>
+ ${mouth}${hairFront(p.hair,hc)}${gl}${acc}`}
+function outfitTorso(p,cx,top,w,col,o={}){const c=col,d=shade(c,-30),l=shade(c,25),fem=p.gender=="女生",hw=w/2,id="t"+(UID++);
+ const waist=fem?hw*.82:hw*.95,belly=o.belly||0,L=o.len||120;
+ const body=`M${cx-hw} ${top+16} C${cx-hw-2} ${top+4} ${cx-hw+10} ${top} ${cx-12} ${top-2} L${cx+12} ${top-2} C${cx+hw-10} ${top} ${cx+hw+2} ${top+4} ${cx+hw} ${top+16} C${cx+hw+belly} ${top+55} ${cx+waist+belly} ${top+80} ${cx+waist} ${top+L} L${cx-waist} ${top+L} C${cx-waist-belly} ${top+80} ${cx-hw-belly} ${top+55} ${cx-hw} ${top+16}Z`;
+ const g=`<defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${d}"/><stop offset=".35" stop-color="${l}"/><stop offset=".65" stop-color="${c}"/><stop offset="1" stop-color="${d}"/></linearGradient></defs>`;
+ const folds=`<path d="M${cx-hw+8} ${top+40} Q${cx-hw+16} ${top+60} ${cx-hw+10} ${top+85} M${cx+hw-8} ${top+42} Q${cx+hw-18} ${top+62} ${cx+hw-10} ${top+88} M${cx-6} ${top+70} Q${cx} ${top+78} ${cx+8} ${top+72}" stroke="${d}" stroke-width="1.6" fill="none" opacity=".55"/>`;
+ let s=g+`<path d="${body}" fill="url(#${id})" stroke="${shade(c,-50)}" stroke-width="1.5"/>`+folds,ot=o.outfit||p.outfit;
+ if(ot=="襯衫領帶")s+=`<path d="M${cx-12} ${top-2} L${cx} ${top+14} L${cx+12} ${top-2} L${cx+8} ${top+8} L${cx} ${top+16} L${cx-8} ${top+8}Z" fill="#fff" stroke="#bbb"/><path d="M${cx-3} ${top+13} L${cx+3} ${top+13} L${cx+5} ${top+52} L${cx} ${top+60} L${cx-5} ${top+52}Z" fill="${o.tie||"#b3263a"}" stroke="#00000044"/><path d="M${cx-2} ${top+22} l4 6 M${cx-3} ${top+34} l6 6" stroke="#ffffff44" stroke-width="1.5"/>`+[1,2,3].map(k=>`<circle cx="${cx+9}" cy="${top+22+k*16}" r="1.2" fill="${d}"/>`).join("");
+ if(ot=="西裝外套")s+=`<path d="M${cx-12} ${top-2} L${cx} ${top+50} L${cx+12} ${top-2}Z" fill="${fem?"#fff":"#f2f2f2"}"/>${fem?"":`<path d="M${cx-3} ${top+6} L${cx+3} ${top+6} L${cx+4} ${top+44} L${cx} ${top+50} L${cx-4} ${top+44}Z" fill="${o.tie||"#8e1b2c"}"/>`}<path d="M${cx-13} ${top-2} L${cx-4} ${top+56} L${cx-hw+6} ${top+20}Z M${cx+13} ${top-2} L${cx+4} ${top+56} L${cx+hw-6} ${top+20}Z" fill="${shade(c,-12)}" stroke="${shade(c,-50)}" stroke-width="1"/><circle cx="${cx}" cy="${top+66}" r="2" fill="${shade(c,-50)}"/><path d="M${cx-hw+12} ${top+34} l10 0" stroke="#fff" stroke-width="2" opacity=".6"/>`;
+ if(ot=="帽T")s+=`<path d="M${cx-20} ${top} C${cx-22} ${top+16} ${cx+22} ${top+16} ${cx+20} ${top} C${cx+12} ${top+8} ${cx-12} ${top+8} ${cx-20} ${top}Z" fill="${d}"/><path d="M${cx-6} ${top+10} v26 M${cx+6} ${top+10} v26" stroke="#eee" stroke-width="2"/><circle cx="${cx-6}" cy="${top+37}" r="2" fill="#eee"/><circle cx="${cx+6}" cy="${top+37}" r="2" fill="#eee"/><path d="M${cx-18} ${top+74} h36 v22 h-36Z" fill="none" stroke="${d}" stroke-width="2"/>`;
+ if(ot=="洋裝")s+=`<path d="M${cx-11} ${top-2} Q${cx} ${top+14} ${cx+11} ${top-2}" fill="url(#none)" stroke="${shade(c,-45)}" stroke-width="2"/><path d="M${cx-waist} ${top+64} Q${cx} ${top+70} ${cx+waist} ${top+64}" stroke="${shade(c,-45)}" stroke-width="3" fill="none"/><circle cx="${cx}" cy="${top+66}" r="3" fill="${l}"/>`;
+ if(ot=="POLO衫")s+=`<path d="M${cx-13} ${top-2} L${cx-3} ${top+10} L${cx-16} ${top+10}Z M${cx+13} ${top-2} L${cx+3} ${top+10} L${cx+16} ${top+10}Z" fill="${l}" stroke="${d}"/><path d="M${cx} ${top+4} v20" stroke="${d}" stroke-width="1.5"/><circle cx="${cx}" cy="${top+12}" r="1.3" fill="#fff"/><circle cx="${cx}" cy="${top+20}" r="1.3" fill="#fff"/>`;
+ if(p.acc=="護身符")s+=`<path d="M${cx-10} ${top} Q${cx} ${top+30} ${cx+10} ${top}" stroke="#c62828" stroke-width="1.2" fill="none"/><rect x="${cx-5}" y="${top+26}" width="10" height="14" rx="2" fill="#d32f2f" stroke="#ffd54a"/><text x="${cx}" y="${top+36}" font-size="7" text-anchor="middle" fill="#ffd54a" font-weight="bold">漲</text>`;
+ if(p.acc=="識別證")s+=`<path d="M${cx-10} ${top} L${cx-2} ${top+40} M${cx+10} ${top} L${cx+2} ${top+40}" stroke="#1e88e5" stroke-width="1.6"/><rect x="${cx-8}" y="${top+40}" width="16" height="20" rx="2" fill="#fff" stroke="#999"/><rect x="${cx-5}" y="${top+43}" width="10" height="8" fill="#90caf9"/>`;
+ return s}
+function arm(pts,col,w,skin){const d=`M${pts.map(p=>p.join(" ")).join(" Q").replace(/Q([^Q]*) Q/,"Q$1 ")}`;const [sk,sd]=SKINS[skin];const e=pts[pts.length-1];
+ return`<path d="${d}" stroke="${shade(col,-45)}" stroke-width="${w+3}" stroke-linecap="round" fill="none"/><path d="${d}" stroke="${col}" stroke-width="${w}" stroke-linecap="round" fill="none"/><path d="${d}" stroke="${shade(col,25)}" stroke-width="${w*.3}" stroke-linecap="round" fill="none" opacity=".45" transform="translate(-1,-2)"/><ellipse cx="${e[0]}" cy="${e[1]}" rx="${w*.55}" ry="${w*.45}" fill="${sk}" stroke="${sd}"/>`}
+function drawWorker(){const p=CFG.worker,fem=p.gender=="女生",col=p.outfitColor,w=fem?62:72,sl=p.outfit=="洋裝"?shade(SKINS[p.skin][0],0):col;
+ const work=`<g class="work">${outfitTorso(p,335,238,w,col)}
+  <g class="handL">${arm([[315,250],[330,290],[392,287]],p.outfit=="洋裝"?SKINS[p.skin][0]:shade(col,-10),fem?10:12,p.skin)}</g>
+  <g transform="translate(337 200) scale(1.08)"><g class="head">${head(p,"down")}</g></g>
+  <g class="handR">${arm([[358,250],[372,290],[416,284]],sl,fem?10:12,p.skin)}</g></g>`;
+ const dream=`<g class="dream"><g transform="rotate(-7 318 330)">${arm([[300,252],[276,214],[306,178]],shade(col,-10),fem?10:12,p.skin)}${outfitTorso(p,318,236,w,col)}
+  <g transform="translate(320 196) scale(1.08)"><g class="headD">${head(p,"happy")}</g></g>
+  <text x="352" y="160" font-size="20">💰</text></g>
+  ${arm([[340,252],[366,284],[380,252]],sl,fem?10:12,p.skin)}
+  <g transform="rotate(-15 385 245)"><rect x="372" y="222" width="26" height="44" rx="4" fill="#212121"/><rect x="375" y="226" width="20" height="34" fill="#fff"/><path d="M377 252 l5 -6 l4 3 l6 -12" stroke="#e53935" stroke-width="2.5" fill="none"/></g>
+  <circle class="phoneGlow" cx="385" cy="244" r="30" fill="url(#glow)"/></g>`;
+ $("worker").innerHTML=work+dream+`<g class="sighpuff"><ellipse cx="296" cy="212" rx="14" ry="8" fill="#fff" stroke="#bbb"/><text x="287" y="216" font-size="9" fill="#888">唉~</text></g>`}
+function drawBoss(){const p={...CFG.boss,acc:"無"},bw={瘦:58,標準:72,壯碩:86}[p.body],belly={瘦:0,標準:4,壯碩:16}[p.body],sc={瘦:1.18,標準:1.22,壯碩:1.3}[p.body];
+ const fem=p.gender=="女生";
+ $("bossBody").innerHTML=`${outfitTorso(p,662,250,bw,p.suit,{outfit:"西裝外套",belly,tie:"#b71c1c",len:200})}
+  <g class="bossArm">${arm([[662-bw/2+6,268],[610,280],[556,247]],shade(p.suit,-8),fem?13:16,p.skin)}<path d="M548 244 l-10 -4" stroke="${SKINS[p.skin][1]}" stroke-width="4" stroke-linecap="round"/></g>
+  <g transform="translate(662 212) scale(${sc})">${head(p,"angry",{stubble:true})}</g>
+  <path d="M690 176 l8 -8 M698 188 l10 -4 M694 196 l12 2" stroke="#e53935" stroke-width="3" stroke-linecap="round"/>
+  <g transform="translate(662 ${250+42})"><rect x="-34" y="-13" width="68" height="26" rx="3" fill="#fff" stroke="#999"/><rect x="-34" y="-13" width="68" height="6" rx="2" fill="#1565c0"/><text y="3" font-size="9.5" text-anchor="middle" font-weight="bold" fill="#222">${esc(BFULL()||"老闆")}</text><text y="11" font-size="7" text-anchor="middle" fill="#555">${esc(CFG.boss.btitle||"")}</text></g>`}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function drawPlate(){const n=esc(WN()),t=esc(CFG.worker.wtitle||"");
+ $("plate").innerHTML=`<defs><linearGradient id="plW" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a0673d"/><stop offset="1" stop-color="#5d3a1f"/></linearGradient><linearGradient id="plA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".95"/><stop offset=".5" stop-color="#eaf4ff" stop-opacity=".85"/><stop offset="1" stop-color="#cfe3f5" stop-opacity=".9"/></linearGradient></defs>
+ <g filter="url(#sh)"><path d="M496 300 L586 300 L582 292 L500 292Z" fill="url(#plW)" stroke="#3e2410"/><path d="M502 293 L580 293 L576 266 L506 266Z" fill="url(#plA)" stroke="#90a4ae" stroke-width="1.2"/>
+ <path d="M508 268 L520 268 L512 291 L504 291Z" fill="#fff" opacity=".5"/><rect x="512" y="270" width="58" height="2.5" fill="#c62828" opacity=".8"/>
+ <text x="541" y="284" text-anchor="middle" font-size="${n.length>4?10:12}" font-weight="900" fill="#263238" font-family="'Noto Serif TC','PMingLiU',serif">${n}</text>
+ <text x="541" y="291" text-anchor="middle" font-size="5.5" fill="#546e7a">${t}</text></g>`}
+function drawAll(){drawWorker();drawBoss();drawPlate();localStorage.setItem("officeCfg",JSON.stringify(CFG))}
+/* ===== 設定面板 ===== */
+function opt(list,v){return list.map(x=>`<option ${x==v?"selected":""}>${x}</option>`).join("")}
+function buildPanel(){const w=CFG.worker,b=CFG.boss;
+ const row=(l,h)=>`<label><span>${l}</span>${h}</label>`;
+ const sel=(who,k,list)=>`<select data-who="${who}" data-k="${k}">${opt(list,CFG[who][k])}</select>`;
+ const col=(who,k)=>`<input type="color" data-who="${who}" data-k="${k}" value="${CFG[who][k]}">`;
+ const txt=(who,k,m)=>`<input type="text" maxlength="${m}" data-who="${who}" data-k="${k}" value="${esc(CFG[who][k]||"")}">`;const chk=(who,k)=>`<input type="checkbox" data-who="${who}" data-k="${k}" ${CFG[who][k]?"checked":""}>`;
+ $("panel").innerHTML=`<div class="pcol"><h3>👩‍💼 上班族</h3>${row("名字",txt("worker","wname",8))}${row("職稱（選填）",txt("worker","wtitle",10))}${row("性別",sel("worker","gender",["男生","女生"]))}${row("髮型",sel("worker","hair",HAIR_W[w.gender]))}${row("髮色",sel("worker","hairColor",Object.keys(HAIRC)))}${row("膚色",sel("worker","skin",Object.keys(SKINS)))}${row("服裝",sel("worker","outfit",OUTFITS))}${row("服裝顏色",col("worker","outfitColor"))}${row("眼鏡",chk("worker","glasses"))}${row("配件",sel("worker","acc",ACCS))}</div>
+ <div class="pcol"><h3>👔 老闆</h3>${row("性別",sel("boss","gender",["男生","女生"]))}${row("髮型",sel("boss","hair",HAIR_B[b.gender]))}${row("髮色",sel("boss","hairColor",Object.keys(HAIRC)))}${row("膚色",sel("boss","skin",Object.keys(SKINS)))}${row("西裝顏色",col("boss","suit"))}${row("眼鏡",chk("boss","glasses"))}${row("體型",sel("boss","body",BODY))}${row("姓",txt("boss","surname",2))}${row("名（選填）",txt("boss","given",3))}${row("職稱",txt("boss","btitle",5))}${row("罵人風格",sel("boss","tone",Object.keys(TONES)))}</div>`;
+ $("panel").querySelectorAll("[data-k]").forEach(e=>e.addEventListener(e.type=="text"||e.type=="color"?"input":"change",()=>{const who=e.dataset.who,k=e.dataset.k;CFG[who][k]=e.type=="checkbox"?e.checked:e.value;
+  if(k=="gender"){if(who=="worker"&&["小明","小美",""].includes(CFG.worker.wname))CFG.worker.wname=e.value=="男生"?"小明":"小美";const L=who=="worker"?HAIR_W:HAIR_B;if(!L[e.value].includes(CFG[who].hair))CFG[who].hair=L[e.value][0];if(who=="worker"&&e.value=="男生"&&CFG.worker.outfit=="洋裝")CFG.worker.outfit="襯衫領帶";buildPanel()}
+  drawAll()}))}
+function randomize(){const r=a=>a[Math.floor(Math.random()*a.length)],rc=()=>"#"+[0,0,0].map(()=>Math.floor(40+Math.random()*170).toString(16).padStart(2,"0")).join("");
+ const wg=r(["男生","女生"]),bg=r(["男生","女生"]);
+ CFG.worker={gender:wg,hair:r(HAIR_W[wg]),hairColor:r(Object.keys(HAIRC)),skin:r(Object.keys(SKINS)),outfit:r(wg=="男生"?OUTFITS.filter(o=>o!="洋裝"):OUTFITS),outfitColor:rc(),glasses:Math.random()<.4,acc:r(ACCS),wname:r(wg=="男生"?["小明","阿凱","志豪","建宏","冠宇"]:["小美","雅婷","怡君","佳穎","欣妤"]),wtitle:r(["資深專員","行銷企劃","工程師","PM","業務代表","會計","實習生",""])};
+ CFG.boss={...CFG.boss,gender:bg,hair:r(HAIR_B[bg]),hairColor:r(Object.keys(HAIRC)),skin:r(Object.keys(SKINS)),suit:rc(),glasses:Math.random()<.5,body:r(BODY),tone:r(Object.keys(TONES)),surname:r(["王","陳","林","張","李","黃","吳","劉"]),given:r(bg=="男生"?["大同","建國","志明","國華",""]:["淑芬","美玲","雅惠","秀英",""]),btitle:r(["經理","總監","協理","副總","董事長","主任","課長"])};
+ buildPanel();drawAll();log("🎲 換了個造型，今天的我煥然一新（但還是要上班）")}
+
+const SAMPLE={isSample:true,date:"範例",source:"範例資料（非真實）",index:{close:20000,change:-100,pct:-0.5},sectors:[{short:"範例A",pct:1.0,close:100},{short:"範例B",pct:0.5,close:100},{short:"範例C",pct:0.1,close:100},{short:"範例D",pct:-0.8,close:100}]};
+const UP={"半導體":"漲了，晶圓都比我的薪水穩","電腦及週邊設備":"漲了，伺服器都在加班賺錢，我幹嘛加班","光電":"漲了，未來一片光明（只要我離職）","通信網路":"漲了，訊號滿格，跟老闆失聯也合理","電子零組件":"漲了，我也想當個被需要的零件","電子通路":"漲了，我的財富通路終於打通","資訊服務":"漲了，系統提示：您可以下班了","其他電子":"漲了，雖然不知道是什麼但我很開心","金融保險":"漲了，存股族今天可以請假","航運":"漲了，我要乘風破浪離開這間公司","鋼鐵":"漲了，辭職的意志比鋼還硬","塑膠":"漲了，我跟這份工作的感情很塑膠","水泥":"漲了，我的心不再被這張辦公桌綁住","食品":"漲了，今天午餐吃好一點","紡織纖維":"漲了，西裝可以收起來了","電機機械":"漲了，我不想再當公司的螺絲釘","電器電纜":"漲了，充飽電準備跑路","化學":"漲了，我跟老闆的化學反應正式結束","生技醫療":"漲了，辭職是最好的保健","玻璃陶瓷":"漲了，不如回家","造紙":"漲了，辭呈的紙都升值了","橡膠":"漲了，我的耐心不像輪胎那麼耐磨","汽車":"漲了，開車上班不如開車兜風","建材營造":"漲了，我要蓋自己的財富王國","觀光餐旅":"漲了，訂機票的手在發抖","貿易百貨":"漲了，週年慶我來了","油電燃氣":"漲了，我的離職之火越燒越旺","綠能環保":"漲了，回家省冷氣也算環保","數位雲端":"漲了，我要飄上雲端當股神","運動休閒":"漲了，下午翹班去運動","居家生活":"漲了，在家炒股才是真生活","其他":"漲了，宇宙在叫我離職"};
+const BOSS=["{s}跌了你還有心情看盤？報告呢！","你的績效跟{s}一樣在跌喔！","上班時間滑手機？{s}都被你看衰了！","{s}都跌了，你的年終也會跌，懂？","我數到三，螢幕切回 Excel！","看什麼看？{s}會因為你盯著它就漲嗎？","這份簡報明天早上給我，{s}不會幫你做！"];
+const SIGH=["（默默把股票 App 關掉）","（打開 Excel，假裝很忙）","唉，房貸還有 28 年…","好，我就是社畜，我認了","先把咖啡喝完再說","（把辭呈塞回抽屜最深處）"];
+const DREAM=["老闆，我們好聚好散","明天開始我就是自由人","辭呈字體要用標楷體還是明體？","在家炒股，冷氣開到 24 度","今天的會議…不參加也沒差吧","打開 104，關掉 104，再打開 104"];
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const tname=s=>`『${s.short}${UP[s.short]||"漲了，該是時候了"}』`;
+const fname=s=>`『${s.short}跌了，老闆在看』`;
+const nm=s=>s.pct>0?tname(s):s.pct<0?fname(s):`『${s.short}平盤，心如止水』`;
+const fmt=(n,d=2)=>n.toLocaleString("zh-TW",{minimumFractionDigits:d,maximumFractionDigits:d});
+const cls=p=>p>0?"up":p<0?"down":"";const sg=p=>(p>0?"+":"")+fmt(p);const $=id=>document.getElementById(id);
+function log(t){const d=document.createElement("div");d.innerHTML=t;$("log").prepend(d)}
+async function load(){if(window.TAIEX_DATA)return window.TAIEX_DATA;try{const r=await fetch("data.json?"+Date.now());if(!r.ok)throw 0;return await r.json()}catch(e){return SAMPLE}}
+const STAGES=[[20,"乖乖搬磚 🧱"],[40,"摸魚中 🐟"],[60,"蓄勢待發 🏃"],[80,"辭呈已寫好 ✉️"],[101,"我要當全職股神 🚀"]];
+let D,meter=0,base=0,busy=false,auto=null;
+const stageOf=m=>STAGES.find(s=>m<s[0])[1];
+function setMeter(m){meter=Math.max(0,Math.min(100,m));$("mf").style.width=meter+"%";$("mv").textContent=meter.toFixed(0)+"%";$("stage").textContent=stageOf(meter);
+ const w=$("worker");w.classList.toggle("isWork",meter<40);w.classList.toggle("isDream",meter>=40);
+ $("letter").setAttribute("opacity",meter>=60?1:0);$("letter").setAttribute("transform",meter>=60?"translate(0,0)":"translate(0,10)");
+ $("box").setAttribute("opacity",meter>=80?1:0);$("papers").setAttribute("opacity",meter>=60?.3:1)}
+function bubble(text,x,y,color){const b=document.createElement("div");b.className="bubble";b.textContent=text;b.style.left=x+"%";b.style.top=y+"%";if(color)b.style.borderColor=b.style.color=color;$("scene").appendChild(b);setTimeout(()=>b.remove(),2600)}
+function drawChart(){const p=D.index.pct,n=12,c=$("candles");let y=225,pts=[],h="";
+ // 示意走勢：僅以當日漲跌方向繪製（非真實分時資料）
+ for(let k=0;k<n;k++){const x=430+k*11.5,dir=(k%3==1?-1:1)*(p>=0?-1:1),ny=Math.max(196,Math.min(262,y+dir*(6+(k*7)%9)));const up=ny<y;h+=`<line x1="${x+3}" y1="${Math.min(y,ny)-5}" x2="${x+3}" y2="${Math.max(y,ny)+5}" stroke="${up?"#ff5252":"#4cdc6a"}"/><rect x="${x}" y="${Math.min(y,ny)}" width="6" height="${Math.max(2,Math.abs(ny-y))}" fill="${up?"#ff5252":"#4cdc6a"}"/>`;pts.push(`${x+3},${ny}`);y=ny}
+ c.innerHTML=h;$("kline").setAttribute("points",pts.join(" "));$("kline").setAttribute("stroke",p>=0?"#ffeb3b":"#80deea");
+ $("scrTxt").textContent=`TAIEX ${fmt(D.index.close)} ${sg(p)}%`;$("scrTxt").setAttribute("fill",p>=0?"#ff8a80":"#7ee08f")}
+function bossIn(s){const b=$("boss");const bt=$("bossTxt");const line=pick(TONES[CFG.boss.tone]||BOSS).replace(/\{s\}/g,s?s.short:"大盤").replace(/\{w\}/g,WN());bt.dataset.full=line;$("bossWho").textContent=BN()+"：";bt.removeAttribute("textLength");
+ if(line.length>14){const m=Math.ceil(line.length/2);bt.innerHTML=`<tspan x="580" dy="-9">${esc(line.slice(0,m))}</tspan><tspan x="580" dy="20">${esc(line.slice(m))}</tspan>`}else bt.textContent=line;b.classList.add("in");$("scene").classList.remove("shake");void $("scene").offsetWidth;$("scene").classList.add("shake");
+ setTimeout(()=>{b.classList.remove("in");const w=$("worker");w.classList.remove("sigh");void w.offsetWidth;w.classList.add("sigh")},1700)}
+function trigger(s){if(busy)return;busy=true;
+ if(s.pct>0){const add=s.pct*10;setMeter(meter+add);bubble(tname(s),42,innerWidth<600?42:30,"#e53935");log(`💭 ${esc(WN())}心想：${tname(s)} <span class="up">${sg(s.pct)}%</span> → 衝動值 +${add.toFixed(1)}｜${esc(WN())}：「${pick(DREAM)}」`);setTimeout(()=>busy=false,900)}
+ else{const sub=Math.abs(s.pct)*10||2;setMeter(meter-sub);bossIn(s);bubble(pick(SIGH),38,40,"#2e7d32");log(`👔 ${esc(BN())}突襲：「${esc($("bossTxt").dataset.full)}」<span class="down">${s.short} ${sg(s.pct)}%</span> → 衝動值 −${sub.toFixed(1)}`);setTimeout(()=>busy=false,1900)}}
+function render(){const i=D.index,p=i.pct;if(D.isSample)$("sample").style.display="block";
+ $("sub").textContent=`資料日期：${D.date}（最近交易日收盤）｜來源：${D.source}`;
+ $("iv").textContent=fmt(i.close);$("ic").innerHTML=`<span class="${cls(p)}">${i.change>0?"▲":i.change<0?"▼":""} ${fmt(Math.abs(i.change))}（${sg(p)}%）</span>`;
+ base=Math.max(0,Math.min(100,50+p*20));setMeter(base);drawChart();
+ const top=D.sectors.slice(0,3);
+ $("thoughts").innerHTML=top.map((s,k)=>`<div class="th" data-k="${k}"><div class="r">念頭 No.${k+1}</div><div class="n">${nm(s)}</div><div class="p ${cls(s.pct)}">${sg(s.pct)}%</div></div>`).join("");
+ document.querySelectorAll(".th").forEach(e=>e.onclick=()=>trigger(top[+e.dataset.k]));
+ const mx=Math.max(...D.sectors.map(s=>Math.abs(s.pct)),.01);
+ $("tbl").innerHTML=`<tr><th class="t">#</th><th class="t">離職念頭（類股）</th><th class="t">效果</th><th class="t">指數</th><th class="t">漲跌%</th><th class="t"></th></tr>`+D.sectors.map((s,k)=>`<tr class="row ${k<3?"top":""}" data-k="${k}"><td>${k+1}</td><td>${nm(s)}</td><td>${s.pct>0?`衝動 +${(s.pct*10).toFixed(1)}`:s.pct<0?"老闆罵人 👔":"—"}</td><td class="n">${fmt(s.close)}</td><td class="n ${cls(s.pct)}">${sg(s.pct)}%</td><td><span class="bw" style="width:${Math.abs(s.pct)/mx*120}px;background:${s.pct>=0?"#e53935":"#2e9d4a"}"></span></td></tr>`).join("");
+ document.querySelectorAll("tr.row").forEach(e=>e.onclick=()=>trigger(D.sectors[+e.dataset.k]));
+ $("rule").innerHTML=`<b>開盤基準</b>：離職衝動值 = 50% + 加權指數當日漲跌幅 × 20（限 0%~100%）。大盤 +2.5% 以上直接爆表 100%，−2.5% 以下歸零乖乖上班。今日 <span class="${cls(p)}">${sg(p)}%</span> → <b>${base.toFixed(0)}%</b>。<br><b>階段</b>：0–19 乖乖搬磚｜20–39 摸魚中｜40–59 蓄勢待發｜60–79 辭呈已寫好｜80–100 我要當全職股神。<br><b>離職念頭（類股）</b>：上漲的類股，點下去衝動值 + 漲幅 × 10；下跌的類股會觸發老闆突襲，衝動值 − 跌幅 × 10。<br>衝動值 ≥ 60 桌上出現辭呈，≥ 80 開始打包紙箱。紅漲綠跌。螢幕上的 K 線只是依當日漲跌方向畫的示意圖，不是真實走勢。`;
+ $("foot").innerHTML=`資料：${D.source}${D.title?"｜"+D.title:""}${D.fetchedAt?"｜抓取時間 "+D.fetchedAt:""}｜純屬娛樂，非投資建議，請勿真的衝動離職`;
+ log(`☕ 早安 ${esc(WN())}！加權指數 ${fmt(i.close)}（<span class="${cls(p)}">${sg(p)}%</span>），今日離職衝動值從 <b>${base.toFixed(0)}%</b> 起跳：${stageOf(base)}`)}
+$("auto").onclick=()=>{if(auto){clearInterval(auto);auto=null;$("auto").textContent="▶ 自動內心戲";return}$("auto").textContent="⏸ 停止";
+ const top=D.sectors.slice(0,3),bot=D.sectors.filter(s=>s.pct<0).slice(-5);let k=0;
+ auto=setInterval(()=>{const s=(k%2==0&&top.length)?top[(k/2)%top.length]:(bot.length?pick(bot):top[0]);k++;trigger(s)},2300)};
+$("reset").onclick=()=>{setMeter(base);log("↺ 回到開盤狀態，衝動值 "+base.toFixed(0)+"%")};
+buildPanel();drawAll();$("rand").onclick=randomize;$("def").onclick=()=>{CFG=JSON.parse(JSON.stringify(DEF));buildPanel();drawAll()};
+load().then(d=>{D=d;render();setTimeout(()=>trigger(D.sectors[0]),900)});
+</script></body></html>
