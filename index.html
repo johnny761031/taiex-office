@@ -58,8 +58,8 @@ footer{text-align:center;font-size:.78rem;opacity:.6;padding:16px}
 @media(max-width:600px){h1{font-size:1.35rem}.wrap{padding:6px;gap:10px}.wrap>*{min-width:0}.card{padding:10px}.meter{min-width:0}.meterbox{flex-wrap:nowrap}.mv{font-size:1.3rem;min-width:50px}.stages{font-size:.6rem}
 .bubble{font-size:.75rem;white-space:normal;max-width:80%;text-align:center;padding:4px 8px}.idx .v{font-size:1.4rem}
 table{font-size:.72rem}td:nth-child(3),th:nth-child(3),td:nth-child(6),th:nth-child(6){display:none}.pcol select,.pcol input[type=text]{min-width:0;max-width:55%}#log{height:220px}}
-.badge{display:inline-block;padding:1px 10px;border-radius:10px;font-weight:bold;font-size:.8rem;color:#fff}.badge.live{background:#e53935;animation:pulse 1.6s infinite}.badge.closed{background:#757575}@keyframes pulse{50%{opacity:.55}}.th.en{border-color:#81c784;box-shadow:0 3px 0 #81c784;background:#f4fbf4}.th.en:hover{box-shadow:0 7px 0 #81c784}.th.en:after{border-color:#81c784;background:#f4fbf4}.th.en .n{color:#1b5e20}.th.none{cursor:default;opacity:.85}</style></head><body>
-<header><h1>💼 上班族<span>離職衝動計</span>｜加權指數版</h1><div class="sub" id="sub">載入資料中…</div><div class="sample" id="sample">⚠️ 範例資料（非真實行情，資料載入失敗）</div></header>
+.badge{display:inline-block;padding:1px 10px;border-radius:10px;font-weight:bold;font-size:.8rem;color:#fff}.badge.live{background:#e53935;animation:pulse 1.6s infinite}.badge.closed{background:#757575}@keyframes pulse{50%{opacity:.55}}.th.en{border-color:#81c784;box-shadow:0 3px 0 #81c784;background:#f4fbf4}.th.en:hover{box-shadow:0 7px 0 #81c784}.th.en:after{border-color:#81c784;background:#f4fbf4}.th.en .n{color:#1b5e20}.th.none{cursor:default;opacity:.85}details.fold>summary{cursor:pointer;font-weight:bold;color:#8a4b2a;font-size:1.02rem;list-style:none}details.fold>summary::-webkit-details-marker{display:none}details.fold>summary:after{content:" ▸";opacity:.6}details.fold[open]>summary:after{content:" ▾"}button.sm{margin:0;padding:5px 14px;font-size:.85rem}h2 small{font-size:.75rem;opacity:.6;font-weight:normal}.th .n{font-size:1.1rem}</style></head><body>
+<header><h1>💼 上班族<span>離職衝動計</span></h1><div class="sub" id="sub">載入資料中…</div><div class="sample" id="sample">⚠️ 範例資料（非真實行情，資料載入失敗）</div></header>
 <div class="wrap">
 <div>
  <div id="scene">
@@ -128,232 +128,233 @@ table{font-size:.72rem}td:nth-child(3),th:nth-child(3),td:nth-child(6),th:nth-ch
  </div>
  <div class="card" style="margin-top:14px">
   <div class="idx"><div><div style="opacity:.7">發行量加權股價指數</div><div class="v" id="iv">—</div></div><div class="v" id="ic">—</div></div>
-  <h2 style="margin-top:12px">💭 今日三大離職念頭（漲幅前三類股，點我觸發）</h2><div class="thoughts" id="thoughts"></div>
-  <h2 style="margin-top:16px;color:#2e7d32">😮‍💨 忍耐老闆罵人三大原因（跌幅前三類股，點我觸發）</h2><div class="thoughts" id="endure"></div>
-  <div style="text-align:center"><button class="auto" id="auto">▶ 自動內心戲</button> <button class="auto" id="reset" style="background:#a1887f;color:#fff">↺ 回到開盤狀態</button></div>
+  <h2 style="margin-top:12px">💭 離職念頭 <small>漲幅前三</small></h2><div class="thoughts" id="thoughts"></div>
+  <h2 style="margin-top:16px;color:#2e7d32">😮‍💨 忍耐理由 <small>跌幅前三</small></h2><div class="thoughts" id="endure"></div>
+  <div style="text-align:center"><button class="auto" id="auto">▶ 自動</button> <button class="auto" id="reset" style="background:#a1887f;color:#fff">↺ 重來</button></div>
  </div>
 </div>
 <div>
- <div class="card"><h2>🎭 內心小劇場</h2><div id="log"></div></div>
- <div class="card" style="margin-top:14px"><h2>📖 衝動值怎麼算</h2><div class="rule" id="rule"></div></div>
+ <div class="card"><h2>🎭 小劇場</h2><div id="log"></div></div>
+ <details class="card fold" style="margin-top:14px"><summary>ℹ️ 說明</summary><div class="rule" id="rule"></div></details>
 </div>
-<div class="card" style="grid-column:1/-1"><h2>🎨 角色設定 <button class="auto" id="rand" style="margin:0 0 0 10px;padding:5px 14px;font-size:.85rem">🎲 隨機造型</button> <button class="auto" id="def" style="margin:0;padding:5px 14px;font-size:.85rem;background:#a1887f;color:#fff">恢復預設</button></h2><div id="panel"></div><div style="font-size:.75rem;opacity:.6;margin-top:6px">設定會自動存在這台裝置的瀏覽器（localStorage）。</div></div>
-<div class="card" style="grid-column:1/-1"><h2>🗂️ 全部離職念頭（上市類股指數漲跌，點任一列觸發）</h2><table id="tbl"></table></div>
+
+<details class="card fold" style="grid-column:1/-1"><summary>🎨 角色設定</summary><div style="margin:8px 0"><button class="auto sm" id="rand">🎲 隨機</button> <button class="auto sm" id="def" style="background:#a1887f;color:#fff">預設</button></div><div id="panel"></div></details>
+<details class="card fold" style="grid-column:1/-1"><summary>🗂️ 全部類股</summary><table id="tbl"></table></details>
 </div>
 <footer id="foot"></footer>
 <script>window.TAIEX_DATA={
  "source": "臺灣證券交易所 基本市況報導 (MIS) 即時指數",
  "title": "盤中即時（漲跌幅＝現值對昨收計算）",
  "date": "2026-10-21",
- "dataTime": "2026-10-21 10:44:25",
+ "dataTime": "2026-10-21 10:50:35",
  "mode": "盤中",
  "note": "盤中模式不含：綠能環保、數位雲端、運動休閒、居家生活（證交所即時 API 未提供）",
  "index": {
   "name": "發行量加權股價指數",
-  "close": 46986.17,
-  "change": 693.24,
-  "pct": 1.5
+  "close": 46994.27,
+  "change": 701.34,
+  "pct": 1.52
  },
  "sectors": [
   {
    "name": "塑膠類指數",
-   "close": 502.37,
-   "change": 33.83,
-   "pct": 7.22,
+   "close": 501.15,
+   "change": 32.61,
+   "pct": 6.96,
    "short": "塑膠"
   },
   {
    "name": "光電類指數",
-   "close": 77.75,
-   "change": 2.73,
-   "pct": 3.64,
+   "close": 77.62,
+   "change": 2.6,
+   "pct": 3.47,
    "short": "光電"
   },
   {
-   "name": "電子零組件類指數",
-   "close": 924.33,
-   "change": 24.94,
-   "pct": 2.77,
-   "short": "電子零組件"
-  },
-  {
-   "name": "電機機械類指數",
-   "close": 530.14,
-   "change": 13.14,
-   "pct": 2.54,
-   "short": "電機機械"
-  },
-  {
    "name": "其他電子類指數",
-   "close": 271.19,
-   "change": 6.69,
-   "pct": 2.53,
+   "close": 271.37,
+   "change": 6.87,
+   "pct": 2.6,
    "short": "其他電子"
   },
   {
-   "name": "生技醫療類指數",
-   "close": 89.78,
-   "change": 2.18,
-   "pct": 2.49,
-   "short": "生技醫療"
-  },
-  {
    "name": "油電燃氣類指數",
-   "close": 141.9,
-   "change": 2.94,
-   "pct": 2.12,
+   "close": 142.49,
+   "change": 3.53,
+   "pct": 2.54,
    "short": "油電燃氣"
   },
   {
+   "name": "生技醫療類指數",
+   "close": 89.8,
+   "change": 2.2,
+   "pct": 2.51,
+   "short": "生技醫療"
+  },
+  {
+   "name": "電機機械類指數",
+   "close": 529.82,
+   "change": 12.82,
+   "pct": 2.48,
+   "short": "電機機械"
+  },
+  {
+   "name": "電子零組件類指數",
+   "close": 920.98,
+   "change": 21.59,
+   "pct": 2.4,
+   "short": "電子零組件"
+  },
+  {
    "name": "化學類指數",
-   "close": 200.59,
-   "change": 3.22,
-   "pct": 1.63,
+   "close": 200.53,
+   "change": 3.16,
+   "pct": 1.6,
    "short": "化學"
   },
   {
-   "name": "電器電纜類指數",
-   "close": 107.91,
-   "change": 1.61,
-   "pct": 1.51,
-   "short": "電器電纜"
-  },
-  {
    "name": "金融保險類指數",
-   "close": 3679.92,
-   "change": 52.6,
-   "pct": 1.45,
+   "close": 3678.76,
+   "change": 51.44,
+   "pct": 1.42,
    "short": "金融保險"
   },
   {
+   "name": "電器電纜類指數",
+   "close": 107.8,
+   "change": 1.5,
+   "pct": 1.41,
+   "short": "電器電纜"
+  },
+  {
    "name": "電子通路類指數",
-   "close": 377.59,
-   "change": 5.19,
-   "pct": 1.39,
+   "close": 377.63,
+   "change": 5.23,
+   "pct": 1.4,
    "short": "電子通路"
   },
   {
    "name": "半導體類指數",
-   "close": 1554.02,
-   "change": 16.47,
-   "pct": 1.07,
+   "close": 1558.39,
+   "change": 20.84,
+   "pct": 1.36,
    "short": "半導體"
   },
   {
    "name": "電腦及週邊設備類指數",
-   "close": 454.59,
-   "change": 3.29,
-   "pct": 0.73,
+   "close": 454.0,
+   "change": 2.7,
+   "pct": 0.6,
    "short": "電腦及週邊設備"
   },
   {
    "name": "造紙類指數",
-   "close": 272.69,
-   "change": 1.38,
-   "pct": 0.51,
+   "close": 272.66,
+   "change": 1.35,
+   "pct": 0.5,
    "short": "造紙"
   },
   {
    "name": "資訊服務類指數",
-   "close": 246.04,
-   "change": 1.12,
-   "pct": 0.46,
+   "close": 245.8,
+   "change": 0.88,
+   "pct": 0.36,
    "short": "資訊服務"
   },
   {
    "name": "汽車類指數",
-   "close": 293.81,
-   "change": 0.82,
-   "pct": 0.28,
+   "close": 293.85,
+   "change": 0.86,
+   "pct": 0.29,
    "short": "汽車"
   },
   {
    "name": "鋼鐵類指數",
-   "close": 125.1,
-   "change": 0.21,
-   "pct": 0.17,
+   "close": 125.24,
+   "change": 0.35,
+   "pct": 0.28,
    "short": "鋼鐵"
   },
   {
    "name": "紡織纖維類指數",
-   "close": 484.78,
-   "change": 0.79,
-   "pct": 0.16,
+   "close": 484.92,
+   "change": 0.93,
+   "pct": 0.19,
    "short": "紡織纖維"
   },
   {
-   "name": "其他類指數",
-   "close": 274.36,
-   "change": 0.39,
-   "pct": 0.14,
-   "short": "其他"
-  },
-  {
    "name": "水泥類指數",
-   "close": 131.45,
-   "change": 0.02,
-   "pct": 0.02,
+   "close": 131.57,
+   "change": 0.14,
+   "pct": 0.11,
    "short": "水泥"
   },
   {
    "name": "建材營造類指數",
-   "close": 441.18,
-   "change": -0.01,
-   "pct": -0.0,
+   "close": 441.45,
+   "change": 0.26,
+   "pct": 0.06,
    "short": "建材營造"
   },
   {
-   "name": "食品類指數",
-   "close": 1927.3,
-   "change": -1.56,
-   "pct": -0.08,
-   "short": "食品"
-  },
-  {
-   "name": "航運類指數",
-   "close": 216.16,
-   "change": -0.19,
-   "pct": -0.09,
-   "short": "航運"
+   "name": "其他類指數",
+   "close": 274.06,
+   "change": 0.09,
+   "pct": 0.03,
+   "short": "其他"
   },
   {
    "name": "觀光餐旅類指數",
-   "close": 102.77,
-   "change": -0.1,
-   "pct": -0.1,
+   "close": 102.87,
+   "change": 0.0,
+   "pct": 0.0,
    "short": "觀光餐旅"
   },
   {
+   "name": "航運類指數",
+   "close": 216.08,
+   "change": -0.27,
+   "pct": -0.12,
+   "short": "航運"
+  },
+  {
+   "name": "食品類指數",
+   "close": 1925.71,
+   "change": -3.15,
+   "pct": -0.16,
+   "short": "食品"
+  },
+  {
    "name": "橡膠類指數",
-   "close": 196.72,
-   "change": -0.35,
-   "pct": -0.18,
+   "close": 196.66,
+   "change": -0.41,
+   "pct": -0.21,
    "short": "橡膠"
   },
   {
    "name": "貿易百貨類指數",
-   "close": 241.41,
-   "change": -1.77,
-   "pct": -0.73,
+   "close": 241.08,
+   "change": -2.1,
+   "pct": -0.86,
    "short": "貿易百貨"
   },
   {
    "name": "通信網路類指數",
-   "close": 241.58,
-   "change": -3.06,
-   "pct": -1.25,
+   "close": 240.98,
+   "change": -3.66,
+   "pct": -1.5,
    "short": "通信網路"
   },
   {
    "name": "玻璃陶瓷類指數",
-   "close": 155.4,
-   "change": -2.76,
-   "pct": -1.75,
+   "close": 155.14,
+   "change": -3.02,
+   "pct": -1.91,
    "short": "玻璃陶瓷"
   }
  ],
  "isSample": false,
- "fetchedAt": "2026-10-21T10:44:31+08:00"
+ "fetchedAt": "2026-10-21T10:50:37+08:00"
 };
 
 /* ===== 角色引擎（SVG 參數化繪製） ===== */
@@ -364,10 +365,7 @@ const HAIR_B={"男生":["短髮","旁分油頭","光頭","地中海","刺蝟頭"
 const OUTFITS=["襯衫領帶","帽T","西裝外套","洋裝","POLO衫"];
 const ACCS=["無","耳機","護身符","識別證","耳環","髮夾"];
 const BODY=["瘦","標準","壯碩"];
-const TONES={"嚴厲":["{w}！{s}跌了你還敢滑手機？","{w}，你的報告呢？明早九點放我桌上！","{s}跌了你還有心情看盤？報告呢！","上班時間滑手機？績效考核見！","{s}都跌了，你的年終也會跌，懂？","我數到三，螢幕切回 Excel！"],
-"嘮叨":["{w}啊，我不是要念你，但是{s}都跌了…","{w}你知道嗎，我跟你這年紀的時候早就升主管了","我跟你說喔，{s}跌就是因為大家不認真…","你看看隔壁小陳，人家從來不看盤欸","我年輕的時候啊，一天工作十六小時…","{s}跌成這樣，你還不快點把報表做完？"],
-"暴怒":["{w}！！！給我進來！！！","{w}你再看盤一次試試看！！","你給我站起來！！{s}都跌了你還笑？！","滑什麼手機！！我要扣你考績！！","{s}崩了你也想崩是不是？！","會議室！現在！馬上！！"],
-"陰陽怪氣":["{w}好厲害喔～上班時間還能顧{s}","哎呀{w}，股神也要交週報喔～","哇～{s}跌了，你應該很閒吧？","不錯嘛，上班時間研究{s}，真是投資高手呢","沒關係，你慢慢看，報告我自己做就好～","喔～原來你的本業是股神啊？"]};
+const TONES={"嚴厲": ["{w}！不准看盤！", "{w}，報告呢？", "{s}跌了還看？", "考績見！", "切回 Excel！", "年終也會跌喔"], "嘮叨": ["{w}啊，我跟你說…", "人家小陳都不看盤", "我年輕的時候啊…", "{s}跌就是不認真", "報表做完沒？", "唉，現在年輕人…"], "暴怒": ["{w}！！進來！！", "滑什麼手機！！", "{s}崩你也崩？！", "扣考績！！", "會議室！現在！！", "{w}再看試試看！！"], "陰陽怪氣": ["{w}好閒喔～", "股神也要交週報喔～", "{s}研究得不錯嘛～", "報告我自己做就好～", "上班看盤真專業呢～", "原來你本業是股神～"]};
 const DEF={worker:{gender:"女生",hair:"長直髮",hairColor:"深棕",skin:"自然",outfit:"西裝外套",outfitColor:"#3f6fb5",glasses:false,acc:"耳機",wname:"小美",wtitle:"資深專員"},
  boss:{gender:"男生",hair:"地中海",hairColor:"黑色",skin:"小麥",suit:"#2f3b46",glasses:true,body:"壯碩",surname:"王",given:"大同",btitle:"經理",tone:"嚴厲"}};
 let CFG=JSON.parse(JSON.stringify(DEF));
@@ -485,25 +483,25 @@ function randomize(){const r=a=>a[Math.floor(Math.random()*a.length)],rc=()=>"#"
  buildPanel();drawAll();log("🎲 換了個造型，今天的我煥然一新（但還是要上班）")}
 
 const SAMPLE={isSample:true,date:"範例",source:"範例資料（非真實）",index:{close:20000,change:-100,pct:-0.5},sectors:[{short:"範例A",pct:1.0,close:100},{short:"範例B",pct:0.5,close:100},{short:"範例C",pct:0.1,close:100},{short:"範例D",pct:-0.8,close:100}]};
-const ENDURE={"半導體": "房貸還沒繳完，忍", "電腦及週邊設備": "筆電分期還有 18 期，忍", "光電": "眼前一片黑，先別衝動，忍", "通信網路": "手機月租費還要繳，忍", "電子零組件": "我只是公司的一顆小零件，忍", "電子通路": "退路都斷了，忍", "資訊服務": "系統顯示：您的存款不足，忍", "其他電子": "說不出原因但就是要忍", "金融保險": "勞健保還是公司幫我付的，忍", "航運": "出不了海了，乖乖靠岸，忍", "鋼鐵": "心要像鋼鐵一樣硬，忍", "塑膠": "我的笑容跟塑膠一樣假，忍", "水泥": "腳像灌了水泥走不了，忍", "食品": "還要靠公司便當活命，忍", "紡織纖維": "西裝還要繼續穿，忍", "電機機械": "螺絲釘就該待在原位，忍", "電器電纜": "冷氣電費公司出，忍", "化學": "跟老闆的化學反應還沒結束，忍", "生技醫療": "員工健檢還沒做，忍", "玻璃陶瓷": "玻璃心碎了也得撿起來，忍", "造紙": "辭呈先揉掉，忍", "橡膠": "要像橡皮一樣有彈性，忍", "汽車": "車貸還有三年，忍", "建材營造": "房子還沒蓋好，忍", "觀光餐旅": "出國夢先收起來，忍", "貿易百貨": "週年慶卡費還沒繳，忍", "油電燃氣": "火氣再大也要先吞下去，忍", "綠能環保": "情緒要節能減碳，忍", "數位雲端": "夢想飄在雲端下不來，忍", "運動休閒": "健身房年費已經付了，忍", "居家生活": "在家炒股只會更慘，忍", "其他": "宇宙叫我再撐一下，忍"};
-const ename=s=>`『${s.short}跌了，${ENDURE[s.short]||"年終還沒領，忍"}』`;
-const UP={"半導體":"漲了，晶圓都比我的薪水穩","電腦及週邊設備":"漲了，伺服器都在加班賺錢，我幹嘛加班","光電":"漲了，未來一片光明（只要我離職）","通信網路":"漲了，訊號滿格，跟老闆失聯也合理","電子零組件":"漲了，我也想當個被需要的零件","電子通路":"漲了，我的財富通路終於打通","資訊服務":"漲了，系統提示：您可以下班了","其他電子":"漲了，雖然不知道是什麼但我很開心","金融保險":"漲了，存股族今天可以請假","航運":"漲了，我要乘風破浪離開這間公司","鋼鐵":"漲了，辭職的意志比鋼還硬","塑膠":"漲了，我跟這份工作的感情很塑膠","水泥":"漲了，我的心不再被這張辦公桌綁住","食品":"漲了，今天午餐吃好一點","紡織纖維":"漲了，西裝可以收起來了","電機機械":"漲了，我不想再當公司的螺絲釘","電器電纜":"漲了，充飽電準備跑路","化學":"漲了，我跟老闆的化學反應正式結束","生技醫療":"漲了，辭職是最好的保健","玻璃陶瓷":"漲了，不如回家","造紙":"漲了，辭呈的紙都升值了","橡膠":"漲了，我的耐心不像輪胎那麼耐磨","汽車":"漲了，開車上班不如開車兜風","建材營造":"漲了，我要蓋自己的財富王國","觀光餐旅":"漲了，訂機票的手在發抖","貿易百貨":"漲了，週年慶我來了","油電燃氣":"漲了，我的離職之火越燒越旺","綠能環保":"漲了，回家省冷氣也算環保","數位雲端":"漲了，我要飄上雲端當股神","運動休閒":"漲了，下午翹班去運動","居家生活":"漲了，在家炒股才是真生活","其他":"漲了，宇宙在叫我離職"};
-const BOSS=["{s}跌了你還有心情看盤？報告呢！","你的績效跟{s}一樣在跌喔！","上班時間滑手機？{s}都被你看衰了！","{s}都跌了，你的年終也會跌，懂？","我數到三，螢幕切回 Excel！","看什麼看？{s}會因為你盯著它就漲嗎？","這份簡報明天早上給我，{s}不會幫你做！"];
-const SIGH=["（默默把股票 App 關掉）","（打開 Excel，假裝很忙）","唉，房貸還有 28 年…","好，我就是社畜，我認了","先把咖啡喝完再說","（把辭呈塞回抽屜最深處）"];
-const DREAM=["老闆，我們好聚好散","明天開始我就是自由人","辭呈字體要用標楷體還是明體？","在家炒股，冷氣開到 24 度","今天的會議…不參加也沒差吧","打開 104，關掉 104，再打開 104"];
+const ENDURE={"半導體": "房貸未繳", "電腦及週邊設備": "筆電分期中", "光電": "前途暗", "通信網路": "月租要繳", "電子零組件": "我是小零件", "電子通路": "退路斷了", "資訊服務": "存款不足", "其他電子": "忍就對了", "金融保險": "勞健保靠公司", "航運": "先別出海", "鋼鐵": "心要夠硬", "塑膠": "假笑撐住", "水泥": "腳走不動", "食品": "便當續命", "紡織纖維": "西裝照穿", "電機機械": "螺絲歸位", "電器電纜": "冷氣公司出", "化學": "還沒反應完", "生技醫療": "健檢未做", "玻璃陶瓷": "玻璃心先撿", "造紙": "辭呈揉掉", "橡膠": "保持彈性", "汽車": "車貸三年", "建材營造": "房還沒蓋好", "觀光餐旅": "出國夢收起", "貿易百貨": "卡費未繳", "油電燃氣": "火氣吞下", "綠能環保": "情緒節能", "數位雲端": "夢在雲端", "運動休閒": "健身費已付", "居家生活": "在家更慘", "其他": "再撐一下"};
+const ename=s=>`『${s.short}跌，${ENDURE[s.short]||"年終未領"}』`;
+const UP={"半導體": "晶圓比我穩", "電腦及週邊設備": "伺服器替我賺", "光電": "前途發光", "通信網路": "失聯合理", "電子零組件": "不當零件", "電子通路": "財路已通", "資訊服務": "系統准下班", "其他電子": "莫名開心", "金融保險": "存股放假", "航運": "乘風離職", "鋼鐵": "去意如鋼", "塑膠": "感情很塑膠", "水泥": "心不被綁", "食品": "午餐加菜", "紡織纖維": "西裝收起來", "電機機械": "不當螺絲", "電器電纜": "充飽電跑路", "化學": "反應結束", "生技醫療": "辭職養生", "玻璃陶瓷": "回家", "造紙": "辭呈升值", "橡膠": "耐心磨光", "汽車": "開車兜風", "建材營造": "蓋財富王國", "觀光餐旅": "訂機票", "貿易百貨": "週年慶見", "油電燃氣": "離職火旺", "綠能環保": "回家省電", "數位雲端": "飄上雲端", "運動休閒": "翹班運動", "居家生活": "在家炒股", "其他": "宇宙叫我走"};
+const BOSS=["不准看盤！","報告呢？","切回 Excel！"];
+const SIGH=["（關掉 App）","（假裝很忙）","唉，房貸…","社畜認了","喝咖啡冷靜"];
+const DREAM=["好聚好散","明天自由","辭呈用標楷體","在家吹冷氣","開 104"];
 const pick=a=>a[Math.floor(Math.random()*a.length)];
-const tname=s=>`『${s.short}${UP[s.short]||"漲了，該是時候了"}』`;
+const tname=s=>`『${s.short}漲，${UP[s.short]||"該走了"}』`;
 const fname=s=>ename(s);
-const nm=s=>s.pct>0?tname(s):s.pct<0?fname(s):`『${s.short}平盤，心如止水』`;
+const nm=s=>s.pct>0?tname(s):s.pct<0?fname(s):`『${s.short}平，心如止水』`;
 const fmt=(n,d=2)=>n.toLocaleString("zh-TW",{minimumFractionDigits:d,maximumFractionDigits:d});
 const cls=p=>p>0?"up":p<0?"down":"";const sg=p=>(p>0?"+":"")+fmt(p);const $=id=>document.getElementById(id);
 function log(t){const d=document.createElement("div");d.innerHTML=t;$("log").prepend(d)}
 async function fetchData(){const r=await fetch("data.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)throw 0;const j=await r.json();if(!j||!j.index||!j.sectors)throw 0;return j}
 async function load(){try{return await fetchData()}catch(e){return window.TAIEX_DATA||SAMPLE}}
 let lastOk=Date.now();
-async function poll(){try{const j=await fetchData();lastOk=Date.now();if((j.dataTime||j.fetchedAt)!==(D.dataTime||D.fetchedAt)){const ob=base;D=j;render(true,ob);log(`📡 行情更新（${esc(j.dataTime||j.date)}）：加權 ${fmt(j.index.close)}（<span class="${cls(j.index.pct)}">${sg(j.index.pct)}%</span>）`)}}catch(e){}stamp()}
+async function poll(){try{const j=await fetchData();lastOk=Date.now();if((j.dataTime||j.fetchedAt)!==(D.dataTime||D.fetchedAt)){const ob=base;D=j;render(true,ob);log(`📡 ${esc((j.dataTime||j.date).slice(-8))} 加權 ${fmt(j.index.close,0)} <span class="${cls(j.index.pct)}">${sg(j.index.pct)}%</span>`)}}catch(e){}stamp()}
 function stamp(){const s=$("live");if(!s)return;const m=D.mode||"收盤";s.className="badge "+(m=="盤中"?"live":"closed");s.textContent=m=="盤中"?"● 盤中":"收盤";
- const ago=Math.round((Date.now()-lastOk)/60000);$("dtime").textContent=`資料時間：${D.dataTime||D.date}${ago>=3?`（${ago} 分鐘未連上更新，顯示最後一筆成功資料）`:""}`}
+ const ago=Math.round((Date.now()-lastOk)/60000);$("dtime").textContent=`${D.dataTime||D.date}${ago>=3?`（${ago} 分未更新）`:""}`}
 const STAGES=[[20,"乖乖搬磚 🧱"],[40,"摸魚中 🐟"],[60,"蓄勢待發 🏃"],[80,"辭呈已寫好 ✉️"],[101,"我要當全職股神 🚀"]];
 let D,meter=0,base=0,busy=false,auto=null;
 const stageOf=m=>STAGES.find(s=>m<s[0])[1];
@@ -521,28 +519,28 @@ function bossIn(s){const b=$("boss");const bt=$("bossTxt");const line=pick(TONES
  if(line.length>14){const m=Math.ceil(line.length/2);bt.innerHTML=`<tspan x="580" dy="-9">${esc(line.slice(0,m))}</tspan><tspan x="580" dy="20">${esc(line.slice(m))}</tspan>`}else bt.textContent=line;b.classList.add("in");$("scene").classList.remove("shake");void $("scene").offsetWidth;$("scene").classList.add("shake");
  setTimeout(()=>{b.classList.remove("in");const w=$("worker");w.classList.remove("sigh");void w.offsetWidth;w.classList.add("sigh")},1700)}
 function trigger(s){if(busy)return;busy=true;
- if(s.pct>0){const add=s.pct*10;setMeter(meter+add);bubble(tname(s),42,innerWidth<600?42:30,"#e53935");log(`💭 ${esc(WN())}心想：${tname(s)} <span class="up">${sg(s.pct)}%</span> → 衝動值 +${add.toFixed(1)}｜${esc(WN())}：「${pick(DREAM)}」`);setTimeout(()=>busy=false,900)}
- else{const sub=Math.abs(s.pct)*10||2;setMeter(meter-sub);bossIn(s);bubble(pick(SIGH),38,40,"#2e7d32");log(`👔 ${esc(BN())}突襲：「${esc($("bossTxt").dataset.full)}」<span class="down">${s.short} ${sg(s.pct)}%</span> → 衝動值 −${sub.toFixed(1)}`);setTimeout(()=>busy=false,1900)}}
+ if(s.pct>0){const add=s.pct*10;setMeter(meter+add);bubble(tname(s),42,innerWidth<600?42:30,"#e53935");log(`💭 ${tname(s)} <span class="up">+${add.toFixed(0)}</span>｜${pick(DREAM)}`);setTimeout(()=>busy=false,900)}
+ else{const sub=Math.abs(s.pct)*10||2;setMeter(meter-sub);bossIn(s);bubble(pick(SIGH),38,40,"#2e7d32");log(`👔 ${esc(BN())}：${esc($("bossTxt").dataset.full)} <span class="down">−${sub.toFixed(0)}</span>`);setTimeout(()=>busy=false,1900)}}
 function render(upd,oldBase){const i=D.index,p=i.pct;if(D.isSample)$("sample").style.display="block";
- $("sub").innerHTML=`<span id="live" class="badge"></span> <span id="dtime"></span>｜來源：${esc(D.source)}${D.note?`<br><small>${esc(D.note)}</small>`:""}`;stamp();
+ $("sub").innerHTML=`<span id="live" class="badge"></span> <span id="dtime"></span>`;stamp();
  $("iv").textContent=fmt(i.close);$("ic").innerHTML=`<span class="${cls(p)}">${i.change>0?"▲":i.change<0?"▼":""} ${fmt(Math.abs(i.change))}（${sg(p)}%）</span>`;
  base=Math.max(0,Math.min(100,50+p*20));setMeter(upd?meter+(base-oldBase):base);drawChart();
  const top=D.sectors.slice(0,3);
- $("thoughts").innerHTML=top.map((s,k)=>`<div class="th" data-k="${k}"><div class="r">念頭 No.${k+1}</div><div class="n">${nm(s)}</div><div class="p ${cls(s.pct)}">${sg(s.pct)}%</div></div>`).join("");
+ $("thoughts").innerHTML=top.map((s,k)=>`<div class="th" data-k="${k}"><div class="n">${nm(s)}</div><div class="p ${cls(s.pct)}">${sg(s.pct)}%</div></div>`).join("");
  document.querySelectorAll("#thoughts .th").forEach(e=>e.onclick=()=>trigger(top[+e.dataset.k]));
  const dn=D.sectors.filter(s=>s.pct<0).sort((a,b)=>a.pct-b.pct).slice(0,3);
- $("endure").innerHTML=dn.length?dn.map((s,k)=>`<div class="th en" data-k="${k}"><div class="r">忍耐理由 No.${k+1}</div><div class="n">${ename(s)}</div><div class="p down">${sg(s.pct)}%</div></div>`).join("")+(dn.length<3?`<div class="th en none"><div class="n">其他類股都沒跌…今天沒理由忍了 🏃</div></div>`:""):`<div class="th en none" style="grid-column:1/-1"><div class="n">今天沒有類股下跌，沒理由忍了！辭呈拿出來 ✉️</div></div>`;
+ $("endure").innerHTML=dn.length?dn.map((s,k)=>`<div class="th en" data-k="${k}"><div class="n">${ename(s)}</div><div class="p down">${sg(s.pct)}%</div></div>`).join("")+(dn.length<3?`<div class="th en none"><div class="n">沒理由忍了 🏃</div></div>`:""):`<div class="th en none" style="grid-column:1/-1"><div class="n">全部都漲，辭呈拿出來 ✉️</div></div>`;
  document.querySelectorAll("#endure .th[data-k]").forEach(e=>e.onclick=()=>trigger(dn[+e.dataset.k]));
  const mx=Math.max(...D.sectors.map(s=>Math.abs(s.pct)),.01);
- $("tbl").innerHTML=`<tr><th class="t">#</th><th class="t">離職念頭（類股）</th><th class="t">效果</th><th class="t">指數</th><th class="t">漲跌%</th><th class="t"></th></tr>`+D.sectors.map((s,k)=>`<tr class="row ${k<3?"top":""}" data-k="${k}"><td>${k+1}</td><td>${nm(s)}</td><td>${s.pct>0?`衝動 +${(s.pct*10).toFixed(1)}`:s.pct<0?"老闆罵人 👔":"—"}</td><td class="n">${fmt(s.close)}</td><td class="n ${cls(s.pct)}">${sg(s.pct)}%</td><td><span class="bw" style="width:${Math.abs(s.pct)/mx*120}px;background:${s.pct>=0?"#e53935":"#2e9d4a"}"></span></td></tr>`).join("");
+ $("tbl").innerHTML=`<tr><th class="t">#</th><th class="t">類股</th><th class="t">效果</th><th class="t">指數</th><th class="t">漲跌%</th><th class="t"></th></tr>`+D.sectors.map((s,k)=>`<tr class="row ${k<3?"top":""}" data-k="${k}"><td>${k+1}</td><td>${nm(s)}</td><td>${s.pct>0?`+${(s.pct*10).toFixed(0)}`:s.pct<0?"👔":"—"}</td><td class="n">${fmt(s.close)}</td><td class="n ${cls(s.pct)}">${sg(s.pct)}%</td><td><span class="bw" style="width:${Math.abs(s.pct)/mx*120}px;background:${s.pct>=0?"#e53935":"#2e9d4a"}"></span></td></tr>`).join("");
  document.querySelectorAll("tr.row").forEach(e=>e.onclick=()=>trigger(D.sectors[+e.dataset.k]));
- $("rule").innerHTML=`<b>開盤基準</b>：離職衝動值 = 50% + 加權指數當日漲跌幅 × 20（限 0%~100%）。大盤 +2.5% 以上直接爆表 100%，−2.5% 以下歸零乖乖上班。今日 <span class="${cls(p)}">${sg(p)}%</span> → <b>${base.toFixed(0)}%</b>。<br><b>階段</b>：0–19 乖乖搬磚｜20–39 摸魚中｜40–59 蓄勢待發｜60–79 辭呈已寫好｜80–100 我要當全職股神。<br><b>離職念頭（類股）</b>：上漲的類股，點下去衝動值 + 漲幅 × 10；下跌的類股會觸發老闆突襲，衝動值 − 跌幅 × 10。<br>衝動值 ≥ 60 桌上出現辭呈，≥ 80 開始打包紙箱。紅漲綠跌。螢幕上的 K 線只是依當日漲跌方向畫的示意圖，不是真實走勢。`;
- $("foot").innerHTML=`資料：${D.source}${D.title?"｜"+D.title:""}${D.fetchedAt?"｜抓取時間 "+D.fetchedAt:""}｜純屬娛樂，非投資建議，請勿真的衝動離職`;
-if(!upd) log(`☕ 早安 ${esc(WN())}！加權指數 ${fmt(i.close)}（<span class="${cls(p)}">${sg(p)}%</span>），今日離職衝動值從 <b>${base.toFixed(0)}%</b> 起跳：${stageOf(base)}`)}
-$("auto").onclick=()=>{if(auto){clearInterval(auto);auto=null;$("auto").textContent="▶ 自動內心戲";return}$("auto").textContent="⏸ 停止";
+ $("rule").innerHTML=`衝動值 = 50% + 加權漲跌% × 20（0–100%）。今日 <span class="${cls(p)}">${sg(p)}%</span> → ${base.toFixed(0)}%。<br>漲的類股：+漲幅×10；跌的類股：老闆出現，−跌幅×10。<br>≥60 寫辭呈，≥80 打包。紅漲綠跌，螢幕 K 線為示意。<br>來源：${esc(D.source)}${D.note?"。"+esc(D.note):""}`;
+ $("foot").innerHTML=`資料：證交所｜純屬娛樂，非投資建議`;
+if(!upd) log(`☕ 早安${esc(WN())}！衝動值 <b>${base.toFixed(0)}%</b>`)}
+$("auto").onclick=()=>{if(auto){clearInterval(auto);auto=null;$("auto").textContent="▶ 自動";return}$("auto").textContent="⏸ 停止";
  let k=0;
  auto=setInterval(()=>{const top=D.sectors.slice(0,3),bot=D.sectors.filter(s=>s.pct<0).slice(-5);const s=(k%2==0&&top.length)?top[(k/2)%top.length]:(bot.length?pick(bot):top[0]);k++;trigger(s)},2300)};
-$("reset").onclick=()=>{setMeter(base);log("↺ 回到開盤狀態，衝動值 "+base.toFixed(0)+"%")};
+$("reset").onclick=()=>{setMeter(base);log("↺ 重來，衝動值 "+base.toFixed(0)+"%")};
 buildPanel();drawAll();$("rand").onclick=randomize;$("def").onclick=()=>{CFG=JSON.parse(JSON.stringify(DEF));buildPanel();drawAll()};
 load().then(d=>{D=d;render();setTimeout(()=>trigger(D.sectors[0]),900);if(location.protocol.startsWith("http")){setInterval(poll,60000);document.addEventListener("visibilitychange",()=>{if(!document.hidden)poll()})}setInterval(stamp,30000)});
 </script></body></html>
