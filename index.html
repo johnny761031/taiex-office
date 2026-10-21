@@ -603,8 +603,16 @@ const fname=s=>ename(s);
 const nm=s=>s.pct>0?tname(s):s.pct<0?fname(s):`『${s.short}平，心如止水』`;
 const fmt=(n,d=2)=>n.toLocaleString("zh-TW",{minimumFractionDigits:d,maximumFractionDigits:d});
 const cls=p=>p>0?"up":p<0?"down":"";const sg=p=>(p>0?"+":"")+fmt(p);const $=id=>document.getElementById(id);
-const LIKE={};
-function like(el,s){LIKE[s.short]=(LIKE[s.short]||0)+1;const sp=el.querySelector(".lk span");if(sp){sp.textContent=LIKE[s.short];sp.parentNode.classList.add("on")}
+const LIKE={},LKT={},AB="https://abacus.jasoncameron.dev",NS="taiexoffice";
+function lkey(n){let h=5381;for(const c of n)h=((h*33)^c.codePointAt(0))>>>0;return "s"+h.toString(36)}
+function lday(){return new Date(Date.now()+8*36e5).toISOString().slice(0,10)}
+function liked(n){try{return localStorage.getItem("lk:"+n)===lday()}catch(e){return false}}
+function lshow(n){document.querySelectorAll('.lk[data-n="'+CSS.escape(n)+'"]').forEach(e=>{const sp=e.querySelector("span");if(sp)sp.textContent=LIKE[n]??0;e.firstChild.textContent=liked(n)?"♥ ":"♡ ";e.classList.toggle("on",liked(n))})}
+function lfetch(n){if(LKT[n]&&Date.now()-LKT[n]<6e4)return;LKT[n]=Date.now();
+ fetch(AB+"/get/"+NS+"/"+lkey(n)).then(r=>r.status==404?{value:0}:r.json()).then(j=>{if(typeof j.value=="number"){LIKE[n]=j.value;lshow(n)}}).catch(()=>{})}
+function like(el,s){const n=s.short;
+ if(!liked(n)){try{localStorage.setItem("lk:"+n,lday())}catch(e){}LIKE[n]=(LIKE[n]||0)+1;lshow(n);
+  fetch(AB+"/hit/"+NS+"/"+lkey(n)).then(r=>r.json()).then(j=>{if(typeof j.value=="number"){LIKE[n]=j.value;LKT[n]=Date.now();lshow(n)}}).catch(()=>{})}
  for(let i=0;i<5;i++){const h=document.createElement("i");h.className="heart";h.textContent=["❤️","💖","🔥","😂","👍"][i];h.style.left=(30+Math.random()*40)+"%";h.style.animationDelay=i*.08+"s";el.appendChild(h);setTimeout(()=>h.remove(),1400)}}
 function log(t,who){who=who||WN();const d=document.createElement("div");d.className="post";const tm=new Date().toLocaleTimeString("zh-TW",{hour:"2-digit",minute:"2-digit",hour12:false});
  const boss=who==BN(),mkt=who=="大盤";d.innerHTML=`<div class="pav ${boss?"b":mkt?"m":""}">${esc(who.slice(0,1))}</div><div class="pbody"><div class="phead"><b>${esc(who)}</b>${boss?'<span class="tag">老闆</span>':''} <span class="tm">${tm}</span></div><div>${t}</div><div class="pact">♡ 💬 ↻</div></div>`;$("log").prepend(d)}
@@ -668,11 +676,12 @@ function render(upd,oldBase){PF=calcPF();const i=D.index,p=PF?PF.dayPct:i.pct;if
  const tg=$("pnlTag");if(tg){tg.style.display=PF?"":"none";if(PF){$("pnlTxt").textContent=`我的庫存 ${sg(PF.dayPct)}%`;$("pnlTxt").setAttribute("fill",PF.dayPct>=0?"#e53935":"#2e9d4a")}}
  base=Math.max(0,Math.min(100,50+p*20));setMeter(upd?meter+(base-oldBase):base);drawChart();
  const top=PF?[...PF.items.filter(x=>x.pct>0).sort((a,b)=>b.pct-a.pct),...D.sectors.filter(s=>s.pct>0)].slice(0,3):D.sectors.slice(0,3);TOP=top;
- $("thoughts").innerHTML=top.map((s,k)=>`<div class="th" data-k="${k}"><div class="n">${nm(s)}</div><div class="p ${cls(s.pct)}">${sg(s.pct)}%</div><div class="lk">♡ <span>${LIKE[s.short]||0}</span></div></div>`).join("");
+ $("thoughts").innerHTML=top.map((s,k)=>`<div class="th" data-k="${k}"><div class="n">${nm(s)}</div><div class="p ${cls(s.pct)}">${sg(s.pct)}%</div><div class="lk" data-n="${s.short}">${liked(s.short)?"♥":"♡"} <span>${LIKE[s.short]??"…"}</span></div></div>`).join("");
  document.querySelectorAll("#thoughts .th").forEach(e=>e.onclick=()=>{like(e,top[+e.dataset.k]);trigger(top[+e.dataset.k])});
  const dn=[...(PF?PF.items.filter(x=>x.pct<0).sort((a,b)=>a.pct-b.pct):[]),...D.sectors.filter(s=>s.pct<0).sort((a,b)=>a.pct-b.pct)].slice(0,3);DNL=dn;
- $("endure").innerHTML=dn.length?dn.map((s,k)=>`<div class="th en" data-k="${k}"><div class="n">${ename(s)}</div><div class="p down">${sg(s.pct)}%</div><div class="lk">♡ <span>${LIKE[s.short]||0}</span></div></div>`).join("")+(dn.length<3?`<div class="th en none"><div class="n">沒理由忍了 🏃</div></div>`:""):`<div class="th en none" style="grid-column:1/-1"><div class="n">全部都漲，辭呈拿出來 ✉️</div></div>`;
+ $("endure").innerHTML=dn.length?dn.map((s,k)=>`<div class="th en" data-k="${k}"><div class="n">${ename(s)}</div><div class="p down">${sg(s.pct)}%</div><div class="lk" data-n="${s.short}">${liked(s.short)?"♥":"♡"} <span>${LIKE[s.short]??"…"}</span></div></div>`).join("")+(dn.length<3?`<div class="th en none"><div class="n">沒理由忍了 🏃</div></div>`:""):`<div class="th en none" style="grid-column:1/-1"><div class="n">全部都漲，辭呈拿出來 ✉️</div></div>`;
  document.querySelectorAll("#endure .th[data-k]").forEach(e=>e.onclick=()=>{like(e,dn[+e.dataset.k]);trigger(dn[+e.dataset.k])});
+ top.concat(dn).forEach(s=>{lfetch(s.short);lshow(s.short)});
  const mx=Math.max(...D.sectors.map(s=>Math.abs(s.pct)),.01);
  $("tbl").innerHTML=`<tr><th class="t">#</th><th class="t">類股</th><th class="t">效果</th><th class="t">指數</th><th class="t">漲跌%</th><th class="t"></th></tr>`+D.sectors.map((s,k)=>`<tr class="row ${k<3?"top":""}" data-k="${k}"><td>${k+1}</td><td>${nm(s)}</td><td>${s.pct>0?`+${(s.pct*10).toFixed(0)}`:s.pct<0?"👔":"—"}</td><td class="n">${fmt(s.close)}</td><td class="n ${cls(s.pct)}">${sg(s.pct)}%</td><td><span class="bw" style="width:${Math.abs(s.pct)/mx*120}px;background:${s.pct>=0?"#e53935":"#2e9d4a"}"></span></td></tr>`).join("");
  document.querySelectorAll("tr.row").forEach(e=>e.onclick=()=>trigger(D.sectors[+e.dataset.k]));
