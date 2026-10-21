@@ -58,7 +58,7 @@ footer{text-align:center;font-size:.78rem;opacity:.6;padding:16px}
 @media(max-width:600px){h1{font-size:1.35rem}.wrap{padding:6px;gap:10px}.wrap>*{min-width:0}.card{padding:10px}.meter{min-width:0}.meterbox{flex-wrap:nowrap}.mv{font-size:1.3rem;min-width:50px}.stages{font-size:.6rem}
 .bubble{font-size:.75rem;white-space:normal;max-width:80%;text-align:center;padding:4px 8px}.idx .v{font-size:1.4rem}
 table{font-size:.72rem}td:nth-child(3),th:nth-child(3),td:nth-child(6),th:nth-child(6){display:none}.pcol select,.pcol input[type=text]{min-width:0;max-width:55%}#log{height:220px}}
-.badge{display:inline-block;padding:1px 10px;border-radius:10px;font-weight:bold;font-size:.8rem;color:#fff}.badge.live{background:#e53935;animation:pulse 1.6s infinite}.badge.closed{background:#757575}@keyframes pulse{50%{opacity:.55}}</style></head><body>
+.badge{display:inline-block;padding:1px 10px;border-radius:10px;font-weight:bold;font-size:.8rem;color:#fff}.badge.live{background:#e53935;animation:pulse 1.6s infinite}.badge.closed{background:#757575}@keyframes pulse{50%{opacity:.55}}.th.en{border-color:#81c784;box-shadow:0 3px 0 #81c784;background:#f4fbf4}.th.en:hover{box-shadow:0 7px 0 #81c784}.th.en:after{border-color:#81c784;background:#f4fbf4}.th.en .n{color:#1b5e20}.th.none{cursor:default;opacity:.85}</style></head><body>
 <header><h1>💼 上班族<span>離職衝動計</span>｜加權指數版</h1><div class="sub" id="sub">載入資料中…</div><div class="sample" id="sample">⚠️ 範例資料（非真實行情，資料載入失敗）</div></header>
 <div class="wrap">
 <div>
@@ -129,6 +129,7 @@ table{font-size:.72rem}td:nth-child(3),th:nth-child(3),td:nth-child(6),th:nth-ch
  <div class="card" style="margin-top:14px">
   <div class="idx"><div><div style="opacity:.7">發行量加權股價指數</div><div class="v" id="iv">—</div></div><div class="v" id="ic">—</div></div>
   <h2 style="margin-top:12px">💭 今日三大離職念頭（漲幅前三類股，點我觸發）</h2><div class="thoughts" id="thoughts"></div>
+  <h2 style="margin-top:16px;color:#2e7d32">😮‍💨 忍耐老闆罵人三大原因（跌幅前三類股，點我觸發）</h2><div class="thoughts" id="endure"></div>
   <div style="text-align:center"><button class="auto" id="auto">▶ 自動內心戲</button> <button class="auto" id="reset" style="background:#a1887f;color:#fff">↺ 回到開盤狀態</button></div>
  </div>
 </div>
@@ -144,148 +145,148 @@ table{font-size:.72rem}td:nth-child(3),th:nth-child(3),td:nth-child(6),th:nth-ch
  "source": "臺灣證券交易所 基本市況報導 (MIS) 即時指數",
  "title": "盤中即時（漲跌幅＝現值對昨收計算）",
  "date": "2026-10-21",
- "dataTime": "2026-10-21 10:37:25",
+ "dataTime": "2026-10-21 10:44:25",
  "mode": "盤中",
  "note": "盤中模式不含：綠能環保、數位雲端、運動休閒、居家生活（證交所即時 API 未提供）",
  "index": {
   "name": "發行量加權股價指數",
-  "close": 46952.77,
-  "change": 659.84,
-  "pct": 1.43
+  "close": 46986.17,
+  "change": 693.24,
+  "pct": 1.5
  },
  "sectors": [
   {
    "name": "塑膠類指數",
-   "close": 502.91,
-   "change": 34.37,
-   "pct": 7.34,
+   "close": 502.37,
+   "change": 33.83,
+   "pct": 7.22,
    "short": "塑膠"
   },
   {
    "name": "光電類指數",
-   "close": 77.45,
-   "change": 2.43,
-   "pct": 3.24,
+   "close": 77.75,
+   "change": 2.73,
+   "pct": 3.64,
    "short": "光電"
   },
   {
    "name": "電子零組件類指數",
-   "close": 924.1,
-   "change": 24.71,
-   "pct": 2.75,
+   "close": 924.33,
+   "change": 24.94,
+   "pct": 2.77,
    "short": "電子零組件"
   },
   {
    "name": "電機機械類指數",
-   "close": 529.97,
-   "change": 12.97,
-   "pct": 2.51,
+   "close": 530.14,
+   "change": 13.14,
+   "pct": 2.54,
    "short": "電機機械"
   },
   {
    "name": "其他電子類指數",
-   "close": 271.15,
-   "change": 6.65,
-   "pct": 2.51,
+   "close": 271.19,
+   "change": 6.69,
+   "pct": 2.53,
    "short": "其他電子"
   },
   {
    "name": "生技醫療類指數",
-   "close": 89.65,
-   "change": 2.05,
-   "pct": 2.34,
+   "close": 89.78,
+   "change": 2.18,
+   "pct": 2.49,
    "short": "生技醫療"
   },
   {
    "name": "油電燃氣類指數",
-   "close": 141.91,
-   "change": 2.95,
+   "close": 141.9,
+   "change": 2.94,
    "pct": 2.12,
    "short": "油電燃氣"
   },
   {
    "name": "化學類指數",
-   "close": 200.44,
-   "change": 3.07,
-   "pct": 1.56,
+   "close": 200.59,
+   "change": 3.22,
+   "pct": 1.63,
    "short": "化學"
   },
   {
+   "name": "電器電纜類指數",
+   "close": 107.91,
+   "change": 1.61,
+   "pct": 1.51,
+   "short": "電器電纜"
+  },
+  {
+   "name": "金融保險類指數",
+   "close": 3679.92,
+   "change": 52.6,
+   "pct": 1.45,
+   "short": "金融保險"
+  },
+  {
    "name": "電子通路類指數",
-   "close": 377.58,
-   "change": 5.18,
+   "close": 377.59,
+   "change": 5.19,
    "pct": 1.39,
    "short": "電子通路"
   },
   {
-   "name": "電器電纜類指數",
-   "close": 107.73,
-   "change": 1.43,
-   "pct": 1.35,
-   "short": "電器電纜"
-  },
-  {
    "name": "半導體類指數",
-   "close": 1557.83,
-   "change": 20.28,
-   "pct": 1.32,
+   "close": 1554.02,
+   "change": 16.47,
+   "pct": 1.07,
    "short": "半導體"
   },
   {
-   "name": "金融保險類指數",
-   "close": 3666.99,
-   "change": 39.67,
-   "pct": 1.09,
-   "short": "金融保險"
-  },
-  {
    "name": "電腦及週邊設備類指數",
-   "close": 453.83,
-   "change": 2.53,
-   "pct": 0.56,
+   "close": 454.59,
+   "change": 3.29,
+   "pct": 0.73,
    "short": "電腦及週邊設備"
   },
   {
    "name": "造紙類指數",
-   "close": 272.48,
-   "change": 1.17,
-   "pct": 0.43,
+   "close": 272.69,
+   "change": 1.38,
+   "pct": 0.51,
    "short": "造紙"
   },
   {
    "name": "資訊服務類指數",
-   "close": 245.82,
-   "change": 0.9,
-   "pct": 0.37,
+   "close": 246.04,
+   "change": 1.12,
+   "pct": 0.46,
    "short": "資訊服務"
   },
   {
    "name": "汽車類指數",
-   "close": 293.86,
-   "change": 0.87,
-   "pct": 0.3,
+   "close": 293.81,
+   "change": 0.82,
+   "pct": 0.28,
    "short": "汽車"
   },
   {
    "name": "鋼鐵類指數",
-   "close": 125.12,
-   "change": 0.23,
-   "pct": 0.18,
+   "close": 125.1,
+   "change": 0.21,
+   "pct": 0.17,
    "short": "鋼鐵"
   },
   {
    "name": "紡織纖維類指數",
-   "close": 484.8,
-   "change": 0.81,
-   "pct": 0.17,
+   "close": 484.78,
+   "change": 0.79,
+   "pct": 0.16,
    "short": "紡織纖維"
   },
   {
-   "name": "觀光餐旅類指數",
-   "close": 102.97,
-   "change": 0.1,
-   "pct": 0.1,
-   "short": "觀光餐旅"
+   "name": "其他類指數",
+   "close": 274.36,
+   "change": 0.39,
+   "pct": 0.14,
+   "short": "其他"
   },
   {
    "name": "水泥類指數",
@@ -295,64 +296,64 @@ table{font-size:.72rem}td:nth-child(3),th:nth-child(3),td:nth-child(6),th:nth-ch
    "short": "水泥"
   },
   {
-   "name": "其他類指數",
-   "close": 273.93,
-   "change": -0.04,
-   "pct": -0.01,
-   "short": "其他"
-  },
-  {
    "name": "建材營造類指數",
-   "close": 440.91,
-   "change": -0.28,
-   "pct": -0.06,
+   "close": 441.18,
+   "change": -0.01,
+   "pct": -0.0,
    "short": "建材營造"
   },
   {
-   "name": "橡膠類指數",
-   "close": 196.7,
-   "change": -0.37,
-   "pct": -0.19,
-   "short": "橡膠"
-  },
-  {
-   "name": "航運類指數",
-   "close": 215.92,
-   "change": -0.43,
-   "pct": -0.2,
-   "short": "航運"
-  },
-  {
    "name": "食品類指數",
-   "close": 1924.7,
-   "change": -4.16,
-   "pct": -0.22,
+   "close": 1927.3,
+   "change": -1.56,
+   "pct": -0.08,
    "short": "食品"
   },
   {
+   "name": "航運類指數",
+   "close": 216.16,
+   "change": -0.19,
+   "pct": -0.09,
+   "short": "航運"
+  },
+  {
+   "name": "觀光餐旅類指數",
+   "close": 102.77,
+   "change": -0.1,
+   "pct": -0.1,
+   "short": "觀光餐旅"
+  },
+  {
+   "name": "橡膠類指數",
+   "close": 196.72,
+   "change": -0.35,
+   "pct": -0.18,
+   "short": "橡膠"
+  },
+  {
    "name": "貿易百貨類指數",
-   "close": 241.03,
-   "change": -2.15,
-   "pct": -0.88,
+   "close": 241.41,
+   "change": -1.77,
+   "pct": -0.73,
    "short": "貿易百貨"
   },
   {
    "name": "通信網路類指數",
-   "close": 241.96,
-   "change": -2.68,
-   "pct": -1.1,
+   "close": 241.58,
+   "change": -3.06,
+   "pct": -1.25,
    "short": "通信網路"
   },
   {
    "name": "玻璃陶瓷類指數",
-   "close": 155.53,
-   "change": -2.63,
-   "pct": -1.66,
+   "close": 155.4,
+   "change": -2.76,
+   "pct": -1.75,
    "short": "玻璃陶瓷"
   }
  ],
  "isSample": false,
- "fetchedAt": "2026-10-21T10:37:26+08:00"
+ "fetchedAt": "2026-10-21T10:44:31+08:00"
 };
 
 /* ===== 角色引擎（SVG 參數化繪製） ===== */
@@ -484,13 +485,15 @@ function randomize(){const r=a=>a[Math.floor(Math.random()*a.length)],rc=()=>"#"
  buildPanel();drawAll();log("🎲 換了個造型，今天的我煥然一新（但還是要上班）")}
 
 const SAMPLE={isSample:true,date:"範例",source:"範例資料（非真實）",index:{close:20000,change:-100,pct:-0.5},sectors:[{short:"範例A",pct:1.0,close:100},{short:"範例B",pct:0.5,close:100},{short:"範例C",pct:0.1,close:100},{short:"範例D",pct:-0.8,close:100}]};
+const ENDURE={"半導體": "房貸還沒繳完，忍", "電腦及週邊設備": "筆電分期還有 18 期，忍", "光電": "眼前一片黑，先別衝動，忍", "通信網路": "手機月租費還要繳，忍", "電子零組件": "我只是公司的一顆小零件，忍", "電子通路": "退路都斷了，忍", "資訊服務": "系統顯示：您的存款不足，忍", "其他電子": "說不出原因但就是要忍", "金融保險": "勞健保還是公司幫我付的，忍", "航運": "出不了海了，乖乖靠岸，忍", "鋼鐵": "心要像鋼鐵一樣硬，忍", "塑膠": "我的笑容跟塑膠一樣假，忍", "水泥": "腳像灌了水泥走不了，忍", "食品": "還要靠公司便當活命，忍", "紡織纖維": "西裝還要繼續穿，忍", "電機機械": "螺絲釘就該待在原位，忍", "電器電纜": "冷氣電費公司出，忍", "化學": "跟老闆的化學反應還沒結束，忍", "生技醫療": "員工健檢還沒做，忍", "玻璃陶瓷": "玻璃心碎了也得撿起來，忍", "造紙": "辭呈先揉掉，忍", "橡膠": "要像橡皮一樣有彈性，忍", "汽車": "車貸還有三年，忍", "建材營造": "房子還沒蓋好，忍", "觀光餐旅": "出國夢先收起來，忍", "貿易百貨": "週年慶卡費還沒繳，忍", "油電燃氣": "火氣再大也要先吞下去，忍", "綠能環保": "情緒要節能減碳，忍", "數位雲端": "夢想飄在雲端下不來，忍", "運動休閒": "健身房年費已經付了，忍", "居家生活": "在家炒股只會更慘，忍", "其他": "宇宙叫我再撐一下，忍"};
+const ename=s=>`『${s.short}跌了，${ENDURE[s.short]||"年終還沒領，忍"}』`;
 const UP={"半導體":"漲了，晶圓都比我的薪水穩","電腦及週邊設備":"漲了，伺服器都在加班賺錢，我幹嘛加班","光電":"漲了，未來一片光明（只要我離職）","通信網路":"漲了，訊號滿格，跟老闆失聯也合理","電子零組件":"漲了，我也想當個被需要的零件","電子通路":"漲了，我的財富通路終於打通","資訊服務":"漲了，系統提示：您可以下班了","其他電子":"漲了，雖然不知道是什麼但我很開心","金融保險":"漲了，存股族今天可以請假","航運":"漲了，我要乘風破浪離開這間公司","鋼鐵":"漲了，辭職的意志比鋼還硬","塑膠":"漲了，我跟這份工作的感情很塑膠","水泥":"漲了，我的心不再被這張辦公桌綁住","食品":"漲了，今天午餐吃好一點","紡織纖維":"漲了，西裝可以收起來了","電機機械":"漲了，我不想再當公司的螺絲釘","電器電纜":"漲了，充飽電準備跑路","化學":"漲了，我跟老闆的化學反應正式結束","生技醫療":"漲了，辭職是最好的保健","玻璃陶瓷":"漲了，不如回家","造紙":"漲了，辭呈的紙都升值了","橡膠":"漲了，我的耐心不像輪胎那麼耐磨","汽車":"漲了，開車上班不如開車兜風","建材營造":"漲了，我要蓋自己的財富王國","觀光餐旅":"漲了，訂機票的手在發抖","貿易百貨":"漲了，週年慶我來了","油電燃氣":"漲了，我的離職之火越燒越旺","綠能環保":"漲了，回家省冷氣也算環保","數位雲端":"漲了，我要飄上雲端當股神","運動休閒":"漲了，下午翹班去運動","居家生活":"漲了，在家炒股才是真生活","其他":"漲了，宇宙在叫我離職"};
 const BOSS=["{s}跌了你還有心情看盤？報告呢！","你的績效跟{s}一樣在跌喔！","上班時間滑手機？{s}都被你看衰了！","{s}都跌了，你的年終也會跌，懂？","我數到三，螢幕切回 Excel！","看什麼看？{s}會因為你盯著它就漲嗎？","這份簡報明天早上給我，{s}不會幫你做！"];
 const SIGH=["（默默把股票 App 關掉）","（打開 Excel，假裝很忙）","唉，房貸還有 28 年…","好，我就是社畜，我認了","先把咖啡喝完再說","（把辭呈塞回抽屜最深處）"];
 const DREAM=["老闆，我們好聚好散","明天開始我就是自由人","辭呈字體要用標楷體還是明體？","在家炒股，冷氣開到 24 度","今天的會議…不參加也沒差吧","打開 104，關掉 104，再打開 104"];
 const pick=a=>a[Math.floor(Math.random()*a.length)];
 const tname=s=>`『${s.short}${UP[s.short]||"漲了，該是時候了"}』`;
-const fname=s=>`『${s.short}跌了，老闆在看』`;
+const fname=s=>ename(s);
 const nm=s=>s.pct>0?tname(s):s.pct<0?fname(s):`『${s.short}平盤，心如止水』`;
 const fmt=(n,d=2)=>n.toLocaleString("zh-TW",{minimumFractionDigits:d,maximumFractionDigits:d});
 const cls=p=>p>0?"up":p<0?"down":"";const sg=p=>(p>0?"+":"")+fmt(p);const $=id=>document.getElementById(id);
@@ -526,7 +529,10 @@ function render(upd,oldBase){const i=D.index,p=i.pct;if(D.isSample)$("sample").s
  base=Math.max(0,Math.min(100,50+p*20));setMeter(upd?meter+(base-oldBase):base);drawChart();
  const top=D.sectors.slice(0,3);
  $("thoughts").innerHTML=top.map((s,k)=>`<div class="th" data-k="${k}"><div class="r">念頭 No.${k+1}</div><div class="n">${nm(s)}</div><div class="p ${cls(s.pct)}">${sg(s.pct)}%</div></div>`).join("");
- document.querySelectorAll(".th").forEach(e=>e.onclick=()=>trigger(top[+e.dataset.k]));
+ document.querySelectorAll("#thoughts .th").forEach(e=>e.onclick=()=>trigger(top[+e.dataset.k]));
+ const dn=D.sectors.filter(s=>s.pct<0).sort((a,b)=>a.pct-b.pct).slice(0,3);
+ $("endure").innerHTML=dn.length?dn.map((s,k)=>`<div class="th en" data-k="${k}"><div class="r">忍耐理由 No.${k+1}</div><div class="n">${ename(s)}</div><div class="p down">${sg(s.pct)}%</div></div>`).join("")+(dn.length<3?`<div class="th en none"><div class="n">其他類股都沒跌…今天沒理由忍了 🏃</div></div>`:""):`<div class="th en none" style="grid-column:1/-1"><div class="n">今天沒有類股下跌，沒理由忍了！辭呈拿出來 ✉️</div></div>`;
+ document.querySelectorAll("#endure .th[data-k]").forEach(e=>e.onclick=()=>trigger(dn[+e.dataset.k]));
  const mx=Math.max(...D.sectors.map(s=>Math.abs(s.pct)),.01);
  $("tbl").innerHTML=`<tr><th class="t">#</th><th class="t">離職念頭（類股）</th><th class="t">效果</th><th class="t">指數</th><th class="t">漲跌%</th><th class="t"></th></tr>`+D.sectors.map((s,k)=>`<tr class="row ${k<3?"top":""}" data-k="${k}"><td>${k+1}</td><td>${nm(s)}</td><td>${s.pct>0?`衝動 +${(s.pct*10).toFixed(1)}`:s.pct<0?"老闆罵人 👔":"—"}</td><td class="n">${fmt(s.close)}</td><td class="n ${cls(s.pct)}">${sg(s.pct)}%</td><td><span class="bw" style="width:${Math.abs(s.pct)/mx*120}px;background:${s.pct>=0?"#e53935":"#2e9d4a"}"></span></td></tr>`).join("");
  document.querySelectorAll("tr.row").forEach(e=>e.onclick=()=>trigger(D.sectors[+e.dataset.k]));
