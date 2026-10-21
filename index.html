@@ -103,6 +103,13 @@ header{padding:8px 10px 2px!important}
 @media(max-width:1100px) and (min-width:701px){.w3{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;grid-template-areas:"s s" "t r"}.lcol{position:static!important}.stick{position:static}.tcol .tdet>table{max-height:70vh}}
 @media(max-width:700px){.w3{grid-template-columns:1fr!important;grid-template-areas:"s" "r" "t"}.lcol{position:sticky;top:0;z-index:20}.stick{position:static}.tcol .tdet{position:static}.tcol .tdet>table{max-height:none}}
 @media(min-width:1101px){#log{height:110px}.rcol details.fold{padding:8px 12px}.rcol>*{margin-bottom:8px!important}.rcol .idx{display:flex;align-items:baseline;gap:10px}.rcol .idx .v{font-size:1.15rem}.ring{width:50px;height:50px}.htxt h1{font-size:1.4rem}.sub{margin-top:0}.tcol .tdet>table{max-height:calc(100vh - 120px)}}
+
+.cfgwrap>details{margin-top:8px}.cfgwrap{min-height:0}
+@media(min-width:1101px){.w3 .lcol{position:sticky;top:8px;height:calc(100vh - 140px);display:flex;flex-direction:column}.w3 .stick{position:static;flex:none}.w3 .cfgwrap{flex:1;overflow-y:auto;padding-bottom:4px}
+ #log{height:calc(100vh - 560px)!important;min-height:140px}}
+@media(max-width:1100px){.w3 .lcol{display:contents}.w3 .stick{grid-area:s}.w3 .cfgwrap{grid-area:c}}
+@media(max-width:1100px) and (min-width:701px){.w3{grid-template-areas:"s s" "c c" "t r"!important}}
+@media(max-width:700px){.w3{grid-template-areas:"s" "c" "r" "t"!important}.w3 .stick{position:sticky!important;top:0;z-index:20;padding-top:4px}body:not(.dark) .w3 .stick{background:#fdf6e9}body.dark .w3 .stick{background:#121016}.cfgwrap>details{margin-top:0;margin-bottom:10px}}
 </style></head><body>
 <header><div class="hrow"><div class="ring"><div id="avatar"></div></div><div class="htxt"><h1>上班族<span>離職衝動計</span></h1><div class="handle" id="handle"></div></div><div class="hbtn"><button id="theme" class="ib" title="深色模式">🌙</button><button id="share" class="ib share">📸 分享</button></div></div><div class="sub" id="sub">載入資料中…</div><div class="sample" id="sample">⚠️ 範例資料（非真實行情，資料載入失敗）</div></header>
 <div class="wrap w3">
@@ -170,7 +177,9 @@ header{padding:8px 10px 2px!important}
   <div class="stages"><span>班味</span><span>已讀不回</span><span>躺平</span><span>下班勿擾</span><span>股神</span></div>
   <div style="text-align:center;margin-top:8px">目前狀態：<span class="stage" id="stage">—</span></div>
  </div>
-</div></div>
+</div>
+<div class="cfgwrap"><details class="card fold"><summary>ℹ️ 說明</summary><div class="rule" id="rule"></div></details>
+<details class="card fold"><summary>🎨 角色設定</summary><div style="margin:8px 0"><button class="auto sm" id="rand">🎲 隨機</button> <button class="auto sm" id="def" style="background:#a1887f;color:#fff">預設</button></div><div id="panel"></div></details></div></div>
 <div class="rcol">
  <div class="card">
   <div class="idx"><div><div style="opacity:.7">發行量加權股價指數</div><div class="v" id="iv">—</div></div><div class="v" id="ic">—</div></div>
@@ -179,8 +188,8 @@ header{padding:8px 10px 2px!important}
   <div style="text-align:center"><button class="auto" id="auto">▶ 自動</button> <button class="auto" id="reset" style="background:#a1887f;color:#fff">↺ 重來</button></div>
  </div>
  <div class="card"><h2>🧵 動態</h2><div id="log"></div></div>
- <details class="card fold" style="margin-top:14px"><summary>ℹ️ 說明</summary><div class="rule" id="rule"></div></details>
-<details class="card fold"><summary>🎨 角色設定</summary><div style="margin:8px 0"><button class="auto sm" id="rand">🎲 隨機</button> <button class="auto sm" id="def" style="background:#a1887f;color:#fff">預設</button></div><div id="panel"></div></details>
+
+
 
 </div>
 </div>
@@ -189,56 +198,56 @@ header{padding:8px 10px 2px!important}
  "source": "臺灣證券交易所 基本市況報導 (MIS) 即時指數",
  "title": "盤中即時（漲跌幅＝現值對昨收計算）",
  "date": "2026-10-21",
- "dataTime": "2026-10-21 11:22:05",
+ "dataTime": "2026-10-21 11:31:15",
  "mode": "盤中",
  "note": "盤中模式不含：綠能環保、數位雲端、運動休閒、居家生活（證交所即時 API 未提供）",
  "index": {
   "name": "發行量加權股價指數",
-  "close": 46985.95,
-  "change": 693.02,
+  "close": 46986.94,
+  "change": 694.01,
   "pct": 1.5
  },
  "sectors": [
   {
    "name": "塑膠類指數",
-   "close": 502.13,
-   "change": 33.59,
-   "pct": 7.17,
+   "close": 502.11,
+   "change": 33.57,
+   "pct": 7.16,
    "short": "塑膠"
   },
   {
    "name": "光電類指數",
-   "close": 77.66,
-   "change": 2.64,
-   "pct": 3.52,
+   "close": 77.59,
+   "change": 2.57,
+   "pct": 3.43,
    "short": "光電"
   },
   {
    "name": "其他電子類指數",
-   "close": 271.93,
-   "change": 7.43,
-   "pct": 2.81,
+   "close": 272.06,
+   "change": 7.56,
+   "pct": 2.86,
    "short": "其他電子"
   },
   {
    "name": "生技醫療類指數",
-   "close": 90.03,
-   "change": 2.43,
-   "pct": 2.77,
+   "close": 90.02,
+   "change": 2.42,
+   "pct": 2.76,
    "short": "生技醫療"
   },
   {
    "name": "電機機械類指數",
-   "close": 529.78,
-   "change": 12.78,
-   "pct": 2.47,
+   "close": 528.9,
+   "change": 11.9,
+   "pct": 2.3,
    "short": "電機機械"
   },
   {
    "name": "電子零組件類指數",
-   "close": 921.52,
-   "change": 22.13,
-   "pct": 2.46,
+   "close": 919.57,
+   "change": 20.18,
+   "pct": 2.24,
    "short": "電子零組件"
   },
   {
@@ -250,128 +259,128 @@ header{padding:8px 10px 2px!important}
   },
   {
    "name": "金融保險類指數",
-   "close": 3695.46,
-   "change": 68.14,
-   "pct": 1.88,
+   "close": 3691.65,
+   "change": 64.33,
+   "pct": 1.77,
    "short": "金融保險"
   },
   {
    "name": "化學類指數",
-   "close": 200.63,
-   "change": 3.26,
-   "pct": 1.65,
+   "close": 200.49,
+   "change": 3.12,
+   "pct": 1.58,
    "short": "化學"
   },
   {
    "name": "電子通路類指數",
-   "close": 378.21,
-   "change": 5.81,
-   "pct": 1.56,
+   "close": 377.56,
+   "change": 5.16,
+   "pct": 1.39,
    "short": "電子通路"
   },
   {
    "name": "電器電纜類指數",
-   "close": 107.82,
-   "change": 1.52,
-   "pct": 1.43,
+   "close": 107.72,
+   "change": 1.42,
+   "pct": 1.34,
    "short": "電器電纜"
   },
   {
    "name": "半導體類指數",
-   "close": 1558.07,
-   "change": 20.52,
-   "pct": 1.33,
+   "close": 1557.44,
+   "change": 19.89,
+   "pct": 1.29,
    "short": "半導體"
   },
   {
    "name": "電腦及週邊設備類指數",
-   "close": 454.44,
-   "change": 3.14,
-   "pct": 0.7,
+   "close": 453.7,
+   "change": 2.4,
+   "pct": 0.53,
    "short": "電腦及週邊設備"
   },
   {
    "name": "資訊服務類指數",
-   "close": 246.06,
-   "change": 1.14,
+   "close": 246.08,
+   "change": 1.16,
    "pct": 0.47,
    "short": "資訊服務"
   },
   {
    "name": "汽車類指數",
-   "close": 293.99,
-   "change": 1.0,
-   "pct": 0.34,
+   "close": 293.96,
+   "change": 0.97,
+   "pct": 0.33,
    "short": "汽車"
   },
   {
-   "name": "造紙類指數",
-   "close": 271.83,
-   "change": 0.52,
-   "pct": 0.19,
-   "short": "造紙"
-  },
-  {
    "name": "鋼鐵類指數",
-   "close": 125.11,
-   "change": 0.22,
-   "pct": 0.18,
+   "close": 125.06,
+   "change": 0.17,
+   "pct": 0.14,
    "short": "鋼鐵"
   },
   {
+   "name": "紡織纖維類指數",
+   "close": 484.4,
+   "change": 0.41,
+   "pct": 0.08,
+   "short": "紡織纖維"
+  },
+  {
+   "name": "造紙類指數",
+   "close": 271.47,
+   "change": 0.16,
+   "pct": 0.06,
+   "short": "造紙"
+  },
+  {
+   "name": "建材營造類指數",
+   "close": 441.41,
+   "change": 0.22,
+   "pct": 0.05,
+   "short": "建材營造"
+  },
+  {
    "name": "其他類指數",
-   "close": 274.35,
-   "change": 0.38,
-   "pct": 0.14,
+   "close": 274.05,
+   "change": 0.08,
+   "pct": 0.03,
    "short": "其他"
   },
   {
    "name": "水泥類指數",
-   "close": 131.58,
-   "change": 0.15,
-   "pct": 0.11,
+   "close": 131.4,
+   "change": -0.03,
+   "pct": -0.02,
    "short": "水泥"
   },
   {
-   "name": "紡織纖維類指數",
-   "close": 484.46,
-   "change": 0.47,
-   "pct": 0.1,
-   "short": "紡織纖維"
-  },
-  {
-   "name": "建材營造類指數",
-   "close": 441.25,
-   "change": 0.06,
-   "pct": 0.01,
-   "short": "建材營造"
-  },
-  {
    "name": "航運類指數",
-   "close": 216.1,
-   "change": -0.25,
-   "pct": -0.12,
+   "close": 216.13,
+   "change": -0.22,
+   "pct": -0.1,
    "short": "航運"
   },
   {
-   "name": "觀光餐旅類指數",
-   "close": 102.67,
-   "change": -0.2,
-   "pct": -0.19,
-   "short": "觀光餐旅"
-  },
-  {
    "name": "橡膠類指數",
-   "close": 196.6,
-   "change": -0.47,
-   "pct": -0.24,
+   "close": 196.71,
+   "change": -0.36,
+   "pct": -0.18,
    "short": "橡膠"
   },
   {
+   "name": "觀光餐旅類指數",
+   "close": 102.68,
+   "change": -0.19,
+   "pct": -0.18,
+   "short": "觀光餐旅"
+  },
+  {
    "name": "食品類指數",
-   "close": 1922.87,
-   "change": -5.99,
-   "pct": -0.31,
+   "close": 1923.01,
+   "change": -5.85,
+   "pct": -0.3,
    "short": "食品"
   },
   {
@@ -383,21 +392,21 @@ header{padding:8px 10px 2px!important}
   },
   {
    "name": "玻璃陶瓷類指數",
-   "close": 156.48,
-   "change": -1.68,
-   "pct": -1.06,
+   "close": 156.68,
+   "change": -1.48,
+   "pct": -0.94,
    "short": "玻璃陶瓷"
   },
   {
    "name": "通信網路類指數",
-   "close": 241.55,
-   "change": -3.09,
-   "pct": -1.26,
+   "close": 241.23,
+   "change": -3.41,
+   "pct": -1.39,
    "short": "通信網路"
   }
  ],
  "isSample": false,
- "fetchedAt": "2026-10-21T11:22:03+08:00"
+ "fetchedAt": "2026-10-21T11:31:16+08:00"
 };
 
 /* ===== 角色引擎（SVG 參數化繪製） ===== */
