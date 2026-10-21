@@ -91,9 +91,22 @@ body.dark .up{color:#ff6b6b}body.dark .down{color:#4cdc6a}
  body:not(.dark) .lcol{background:#fdf6e9}body.dark .lcol{background:#121016}
  .mcard{margin-top:6px;padding:6px 10px}.mcard .stages{display:none}.mcard>div[style]{margin-top:2px!important;font-size:.85rem}.mcard .stage{font-size:.85rem;padding:2px 8px}
  .th .n{font-size:.72rem!important}.th .p{font-size:.7rem}#log{height:200px}}
+
+.w3{max-width:1500px!important;display:grid;grid-template-columns:270px minmax(0,1fr) 370px!important;grid-template-areas:"t s r";gap:12px!important;align-items:start}
+.w3 .tcol{grid-area:t}.w3 .lcol{grid-area:s}.w3 .rcol{grid-area:r}
+header{padding:8px 10px 2px!important}
+.tcol .tdet{padding:10px;position:sticky;top:8px}.tcol .tdet>table{display:block;max-height:calc(100vh - 140px);overflow-y:auto}
+.tcol table{font-size:.72rem}.tcol td,.tcol th.t{padding:3px 4px}.tcol td:nth-child(3),.tcol th:nth-child(3),.tcol td:nth-child(4),.tcol th:nth-child(4),.tcol td:nth-child(6),.tcol th:nth-child(6){display:none}
+.tcol tbody,.tcol tr{width:100%}
+#log{height:150px}.rcol>*{margin-bottom:10px}
+@media(min-width:1101px){.tdet>summary{pointer-events:none}.tdet>summary:after{content:""!important}}
+@media(max-width:1100px) and (min-width:701px){.w3{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;grid-template-areas:"s s" "t r"}.lcol{position:static!important}.stick{position:static}.tcol .tdet>table{max-height:70vh}}
+@media(max-width:700px){.w3{grid-template-columns:1fr!important;grid-template-areas:"s" "r" "t"}.lcol{position:sticky;top:0;z-index:20}.stick{position:static}.tcol .tdet{position:static}.tcol .tdet>table{max-height:none}}
+@media(min-width:1101px){#log{height:110px}.rcol details.fold{padding:8px 12px}.rcol>*{margin-bottom:8px!important}.rcol .idx{display:flex;align-items:baseline;gap:10px}.rcol .idx .v{font-size:1.15rem}.ring{width:50px;height:50px}.htxt h1{font-size:1.4rem}.sub{margin-top:0}.tcol .tdet>table{max-height:calc(100vh - 120px)}}
 </style></head><body>
 <header><div class="hrow"><div class="ring"><div id="avatar"></div></div><div class="htxt"><h1>上班族<span>離職衝動計</span></h1><div class="handle" id="handle"></div></div><div class="hbtn"><button id="theme" class="ib" title="深色模式">🌙</button><button id="share" class="ib share">📸 分享</button></div></div><div class="sub" id="sub">載入資料中…</div><div class="sample" id="sample">⚠️ 範例資料（非真實行情，資料載入失敗）</div></header>
-<div class="wrap">
+<div class="wrap w3">
+<div class="tcol"><details class="card fold tdet" id="tdet"><summary>🗂️ 全部類股</summary><table id="tbl"></table></details></div>
 <div class="lcol"><div class="stick">
  <div id="scene">
  <svg viewBox="0 0 800 440" id="svg">
@@ -168,7 +181,7 @@ body.dark .up{color:#ff6b6b}body.dark .down{color:#4cdc6a}
  <div class="card"><h2>🧵 動態</h2><div id="log"></div></div>
  <details class="card fold" style="margin-top:14px"><summary>ℹ️ 說明</summary><div class="rule" id="rule"></div></details>
 <details class="card fold"><summary>🎨 角色設定</summary><div style="margin:8px 0"><button class="auto sm" id="rand">🎲 隨機</button> <button class="auto sm" id="def" style="background:#a1887f;color:#fff">預設</button></div><div id="panel"></div></details>
-<details class="card fold"><summary>🗂️ 全部類股</summary><table id="tbl"></table></details>
+
 </div>
 </div>
 <footer id="foot"></footer>
@@ -176,57 +189,57 @@ body.dark .up{color:#ff6b6b}body.dark .down{color:#4cdc6a}
  "source": "臺灣證券交易所 基本市況報導 (MIS) 即時指數",
  "title": "盤中即時（漲跌幅＝現值對昨收計算）",
  "date": "2026-10-21",
- "dataTime": "2026-10-21 11:08:50",
+ "dataTime": "2026-10-21 11:22:05",
  "mode": "盤中",
  "note": "盤中模式不含：綠能環保、數位雲端、運動休閒、居家生活（證交所即時 API 未提供）",
  "index": {
   "name": "發行量加權股價指數",
-  "close": 47007.87,
-  "change": 714.94,
-  "pct": 1.54
+  "close": 46985.95,
+  "change": 693.02,
+  "pct": 1.5
  },
  "sectors": [
   {
    "name": "塑膠類指數",
-   "close": 500.44,
-   "change": 31.9,
-   "pct": 6.81,
+   "close": 502.13,
+   "change": 33.59,
+   "pct": 7.17,
    "short": "塑膠"
   },
   {
    "name": "光電類指數",
-   "close": 77.48,
-   "change": 2.46,
-   "pct": 3.28,
+   "close": 77.66,
+   "change": 2.64,
+   "pct": 3.52,
    "short": "光電"
   },
   {
-   "name": "生技醫療類指數",
-   "close": 89.99,
-   "change": 2.39,
-   "pct": 2.73,
-   "short": "生技醫療"
-  },
-  {
    "name": "其他電子類指數",
-   "close": 271.62,
-   "change": 7.12,
-   "pct": 2.69,
+   "close": 271.93,
+   "change": 7.43,
+   "pct": 2.81,
    "short": "其他電子"
   },
   {
-   "name": "電子零組件類指數",
-   "close": 921.84,
-   "change": 22.45,
-   "pct": 2.5,
-   "short": "電子零組件"
+   "name": "生技醫療類指數",
+   "close": 90.03,
+   "change": 2.43,
+   "pct": 2.77,
+   "short": "生技醫療"
   },
   {
    "name": "電機機械類指數",
-   "close": 529.2,
-   "change": 12.2,
-   "pct": 2.36,
+   "close": 529.78,
+   "change": 12.78,
+   "pct": 2.47,
    "short": "電機機械"
+  },
+  {
+   "name": "電子零組件類指數",
+   "close": 921.52,
+   "change": 22.13,
+   "pct": 2.46,
+   "short": "電子零組件"
   },
   {
    "name": "油電燃氣類指數",
@@ -237,154 +250,154 @@ body.dark .up{color:#ff6b6b}body.dark .down{color:#4cdc6a}
   },
   {
    "name": "金融保險類指數",
-   "close": 3685.17,
-   "change": 57.85,
-   "pct": 1.59,
+   "close": 3695.46,
+   "change": 68.14,
+   "pct": 1.88,
    "short": "金融保險"
   },
   {
    "name": "化學類指數",
-   "close": 200.39,
-   "change": 3.02,
-   "pct": 1.53,
+   "close": 200.63,
+   "change": 3.26,
+   "pct": 1.65,
    "short": "化學"
   },
   {
    "name": "電子通路類指數",
-   "close": 377.85,
-   "change": 5.45,
-   "pct": 1.46,
+   "close": 378.21,
+   "change": 5.81,
+   "pct": 1.56,
    "short": "電子通路"
   },
   {
    "name": "電器電纜類指數",
-   "close": 107.78,
-   "change": 1.48,
-   "pct": 1.39,
+   "close": 107.82,
+   "change": 1.52,
+   "pct": 1.43,
    "short": "電器電纜"
   },
   {
    "name": "半導體類指數",
-   "close": 1557.78,
-   "change": 20.23,
-   "pct": 1.32,
+   "close": 1558.07,
+   "change": 20.52,
+   "pct": 1.33,
    "short": "半導體"
   },
   {
    "name": "電腦及週邊設備類指數",
-   "close": 454.73,
-   "change": 3.43,
-   "pct": 0.76,
+   "close": 454.44,
+   "change": 3.14,
+   "pct": 0.7,
    "short": "電腦及週邊設備"
   },
   {
-   "name": "汽車類指數",
-   "close": 293.95,
-   "change": 0.96,
-   "pct": 0.33,
-   "short": "汽車"
-  },
-  {
    "name": "資訊服務類指數",
-   "close": 245.67,
-   "change": 0.75,
-   "pct": 0.31,
+   "close": 246.06,
+   "change": 1.14,
+   "pct": 0.47,
    "short": "資訊服務"
   },
   {
+   "name": "汽車類指數",
+   "close": 293.99,
+   "change": 1.0,
+   "pct": 0.34,
+   "short": "汽車"
+  },
+  {
    "name": "造紙類指數",
-   "close": 271.89,
-   "change": 0.58,
-   "pct": 0.21,
+   "close": 271.83,
+   "change": 0.52,
+   "pct": 0.19,
    "short": "造紙"
   },
   {
-   "name": "紡織纖維類指數",
-   "close": 484.82,
-   "change": 0.83,
-   "pct": 0.17,
-   "short": "紡織纖維"
-  },
-  {
    "name": "鋼鐵類指數",
-   "close": 125.09,
-   "change": 0.2,
-   "pct": 0.16,
+   "close": 125.11,
+   "change": 0.22,
+   "pct": 0.18,
    "short": "鋼鐵"
   },
   {
-   "name": "航運類指數",
-   "close": 216.63,
-   "change": 0.28,
-   "pct": 0.13,
-   "short": "航運"
-  },
-  {
    "name": "其他類指數",
-   "close": 274.15,
-   "change": 0.18,
-   "pct": 0.07,
+   "close": 274.35,
+   "change": 0.38,
+   "pct": 0.14,
    "short": "其他"
   },
   {
    "name": "水泥類指數",
-   "close": 131.46,
-   "change": 0.03,
-   "pct": 0.02,
+   "close": 131.58,
+   "change": 0.15,
+   "pct": 0.11,
    "short": "水泥"
   },
   {
+   "name": "紡織纖維類指數",
+   "close": 484.46,
+   "change": 0.47,
+   "pct": 0.1,
+   "short": "紡織纖維"
+  },
+  {
    "name": "建材營造類指數",
-   "close": 441.15,
-   "change": -0.04,
-   "pct": -0.01,
+   "close": 441.25,
+   "change": 0.06,
+   "pct": 0.01,
    "short": "建材營造"
   },
   {
+   "name": "航運類指數",
+   "close": 216.1,
+   "change": -0.25,
+   "pct": -0.12,
+   "short": "航運"
+  },
+  {
    "name": "觀光餐旅類指數",
-   "close": 102.82,
-   "change": -0.05,
-   "pct": -0.05,
+   "close": 102.67,
+   "change": -0.2,
+   "pct": -0.19,
    "short": "觀光餐旅"
   },
   {
-   "name": "食品類指數",
-   "close": 1925.77,
-   "change": -3.09,
-   "pct": -0.16,
-   "short": "食品"
-  },
-  {
    "name": "橡膠類指數",
-   "close": 196.73,
-   "change": -0.34,
-   "pct": -0.17,
+   "close": 196.6,
+   "change": -0.47,
+   "pct": -0.24,
    "short": "橡膠"
   },
   {
+   "name": "食品類指數",
+   "close": 1922.87,
+   "change": -5.99,
+   "pct": -0.31,
+   "short": "食品"
+  },
+  {
    "name": "貿易百貨類指數",
-   "close": 241.54,
-   "change": -1.64,
-   "pct": -0.67,
+   "close": 241.17,
+   "change": -2.01,
+   "pct": -0.83,
    "short": "貿易百貨"
   },
   {
-   "name": "通信網路類指數",
-   "close": 241.54,
-   "change": -3.1,
-   "pct": -1.27,
-   "short": "通信網路"
+   "name": "玻璃陶瓷類指數",
+   "close": 156.48,
+   "change": -1.68,
+   "pct": -1.06,
+   "short": "玻璃陶瓷"
   },
   {
-   "name": "玻璃陶瓷類指數",
-   "close": 154.92,
-   "change": -3.24,
-   "pct": -2.05,
-   "short": "玻璃陶瓷"
+   "name": "通信網路類指數",
+   "close": 241.55,
+   "change": -3.09,
+   "pct": -1.26,
+   "short": "通信網路"
   }
  ],
  "isSample": false,
- "fetchedAt": "2026-10-21T11:08:59+08:00"
+ "fetchedAt": "2026-10-21T11:22:03+08:00"
 };
 
 /* ===== 角色引擎（SVG 參數化繪製） ===== */
@@ -615,5 +628,6 @@ buildPanel();drawAll();$("rand").onclick=randomize;$("def").onclick=()=>{CFG=JSO
 (function(){const st=localStorage.getItem("officeTheme");const dark=st?st=="dark":matchMedia("(prefers-color-scheme: dark)").matches;setTheme(dark)})();
 $("theme").onclick=()=>{const d=!document.body.classList.contains("dark");setTheme(d);localStorage.setItem("officeTheme",d?"dark":"light")};
 $("share").onclick=shareImg;
+if(innerWidth>700)$("tdet").open=true;
 load().then(d=>{D=d;render();setTimeout(()=>trigger(D.sectors[0]),900);if(location.protocol.startsWith("http")){setInterval(poll,60000);document.addEventListener("visibilitychange",()=>{if(!document.hidden)poll()})}setInterval(stamp,30000)});
 </script></body></html>
