@@ -37,6 +37,7 @@ footer{text-align:center;font-size:.78rem;opacity:.6;padding:16px}
 .cursor{animation:blink 1s steps(1) infinite}@keyframes blink{50%{opacity:0}}
 .kl{stroke-dasharray:700;stroke-dashoffset:700;animation:draw 3s ease-out forwards infinite alternate}@keyframes draw{to{stroke-dashoffset:0}}
 #worker .work,#worker .dream{transition:opacity .5s}
+.tear{animation:tear 1.2s ease-in infinite}@keyframes tear{0%{transform:translateY(0);opacity:0}15%{opacity:1}100%{transform:translateY(22px);opacity:0}}
 #worker.isWork .dream{opacity:0}#worker.isDream .work{opacity:0}
 #worker.isWork .handL{animation:typeL .25s infinite alternate}#worker.isWork .handR{animation:typeR .25s infinite alternate .12s}
 @keyframes typeL{to{transform:translateY(-4px)}}@keyframes typeR{to{transform:translateY(-4px)}}
@@ -456,13 +457,23 @@ function eye(x,y,ex,fem,iris){if(ex=="happy")return`<path d="M${x-6} ${y+1} Q${x
  const ang=ex=="angry";
  return`<path d="M${x-6} ${y} Q${x} ${y-5} ${x+6} ${y} Q${x} ${y+4} ${x-6} ${y}Z" fill="#fbfbf8"/><circle cx="${x}" cy="${y+look*.5}" r="${ang?2.6:3.2}" fill="${iris}"/><circle cx="${x}" cy="${y+look*.5}" r="1.5" fill="#111"/><circle cx="${x+1.1}" cy="${y-1+look*.5}" r=".9" fill="#fff"/>${lid}
  <path d="M${x-6.5} ${y} Q${x} ${y-5.5} ${x+6.5} ${y}" stroke="#2a1a14" stroke-width="${fem?2.3:1.5}" fill="none" stroke-linecap="round"/>${fem?`<path d="M${x+(x<0?-6.5:6.5)} ${y} l${x<0?-2.5:2.5} -2.5" stroke="#2a1a14" stroke-width="1.4"/>`:""}<path d="M${x-4} ${y+3.2} Q${x} ${y+4.4} ${x+4} ${y+3.2}" stroke="#00000022" stroke-width="1" fill="none"/>`}
-function head(p,ex,o={}){const id="h"+(UID++),[sk,sd]=SKINS[p.skin]||SKINS["自然"],hc=HAIRC[p.hairColor]||p.hairColor,fem=p.gender=="女生",bc=shade(hc,-10);
- const brow=(x)=>{const y=-11;if(ex=="angry")return`<path d="M${x-7} ${y-(x<0?3:-2)} L${x+7} ${y+(x<0?2:-3)}" stroke="${bc}" stroke-width="${fem?2.2:3.2}" stroke-linecap="round"/>`;return`<path d="M${x-7} ${y+1} Q${x} ${y-(ex=="happy"?4:2.5)} ${x+7} ${y+1}" stroke="${bc}" stroke-width="${fem?1.7:2.6}" fill="none" stroke-linecap="round"/>`};
+function head(p,ex,o={}){const cry=/^cry/.test(ex)?+ex[3]:0;if(cry)ex="down";const id="h"+(UID++),[sk,sd]=SKINS[p.skin]||SKINS["自然"],hc=HAIRC[p.hairColor]||p.hairColor,fem=p.gender=="女生",bc=shade(hc,-10);
+ const brow=(x)=>{const y=-11;if(cry){const t=1.5+cry*1.6,dx=x<0?1:-1;return`<path d="M${x-7} ${y+(dx<0?-t:3)} Q${x} ${y-1} ${x+7} ${y+(dx>0?-t:3)}" stroke="${bc}" stroke-width="${fem?1.9:2.8}" fill="none" stroke-linecap="round"/>`}if(ex=="angry")return`<path d="M${x-7} ${y-(x<0?3:-2)} L${x+7} ${y+(x<0?2:-3)}" stroke="${bc}" stroke-width="${fem?2.2:3.2}" stroke-linecap="round"/>`;return`<path d="M${x-7} ${y+1} Q${x} ${y-(ex=="happy"?4:2.5)} ${x+7} ${y+1}" stroke="${bc}" stroke-width="${fem?1.7:2.6}" fill="none" stroke-linecap="round"/>`};
  const lip=fem?"#c4505f":shade(sd,-15);
- const mouth={focus:`<path d="M-5 16 Q0 17.2 5 16" stroke="${lip}" stroke-width="1.8" fill="none" stroke-linecap="round"/>${fem?`<path d="M-4 17 Q0 19 4 17" stroke="${lip}" stroke-width="1.2" fill="none" opacity=".6"/>`:""}`,
+ let mouth={focus:`<path d="M-5 16 Q0 17.2 5 16" stroke="${lip}" stroke-width="1.8" fill="none" stroke-linecap="round"/>${fem?`<path d="M-4 17 Q0 19 4 17" stroke="${lip}" stroke-width="1.2" fill="none" opacity=".6"/>`:""}`,
   happy:`<path d="M-8 14 Q0 23 8 14 Q0 17 -8 14Z" fill="#8e2b38" stroke="${lip}" stroke-width="1.4"/><path d="M-6 14.8 Q0 17 6 14.8 L5 16.4 Q0 17.6 -5 16.4Z" fill="#fff"/>`,
   angry:`<ellipse cx="0" cy="17" rx="7.5" ry="6" fill="#5d1018" stroke="${lip}" stroke-width="1.4"/><path d="M-6 13.5 Q0 12 6 13.5 L6 15 L-6 15Z" fill="#fff"/><ellipse cx="0" cy="20" rx="4" ry="2" fill="#c2405a"/>`,
   down:`<path d="M-5 16.5 Q0 15.5 5 16.5" stroke="${lip}" stroke-width="1.8" fill="none" stroke-linecap="round"/>`}[ex];
+ let cryFx="";if(cry){
+  mouth=cry==1?`<path d="M-5 17.5 Q0 13.8 5 17.5" stroke="${lip}" stroke-width="1.9" fill="none" stroke-linecap="round"/><path d="M-2 19.5 Q0 20.3 2 19.5" stroke="${lip}" stroke-width="1" fill="none" opacity=".5"/>`
+  :cry==2?`<path d="M-6 18.5 Q-3 14.5 0 15.5 Q3 14.5 6 18.5 Q0 17 -6 18.5Z" fill="#7a2230" stroke="${lip}" stroke-width="1.5" stroke-linejoin="round"/>`
+  :`<path d="M-8 20 Q-4 12 0 13 Q4 12 8 20 Q0 23 -8 20Z" fill="#5d1018" stroke="${lip}" stroke-width="1.5"/><path d="M-5 14.6 Q0 13.4 5 14.6 L4.5 15.8 Q0 15 -4.5 15.8Z" fill="#fff"/><ellipse cx="0" cy="20" rx="3.6" ry="1.5" fill="#c2405a"/>`;
+  const wet=x=>`<path d="M${x-6} ${-0.5} Q${x} 3.6 ${x+6} -0.5" stroke="#7fd3ff" stroke-width="${1+cry*.4}" fill="none" opacity=".9"/><circle cx="${x-2}" cy="-2" r="${.8+cry*.25}" fill="#fff" opacity=".9"/>`;
+  cryFx=wet(-9)+wet(9);
+  if(cry==1)cryFx+=`<path d="M-14 1 q-1.6 2.6 0 3.6 q1.6 -1 0 -3.6Z" fill="#8fdcff" stroke="#3fa9e0" stroke-width=".4"/>`;
+  if(cry>=2)for(const x of[-13,13]){cryFx+=`<path d="M${x} 1 Q${x+(x<0?-1.5:1.5)} 9 ${x+(x<0?-.5:.5)} ${cry==3?26:14}" stroke="#8fdcff" stroke-width="${cry==3?3.2:2}" fill="none" stroke-linecap="round" opacity=".85"/>`;
+   cryFx+=`<path class="tear" style="animation-delay:${x<0?0:.6}s" d="M${x} 3 q-2.2 3.6 0 5 q2.2 -1.4 0 -5Z" fill="#8fdcff" stroke="#3fa9e0" stroke-width=".5"/>`;
+   if(cry==3)cryFx+=`<path class="tear" style="animation-delay:${x<0?.9:.3}s" d="M${x+(x<0?-1:1)} 3 q-2.2 3.6 0 5 q2.2 -1.4 0 -5Z" fill="#8fdcff" stroke="#3fa9e0" stroke-width=".5"/>`}}
  const iris=p.hairColor=="霧藍"?"#3a5f8a":"#4a2c1d";
  let acc="";const a=p.acc;
  if(a=="耳機"||a=="頭戴式耳機")acc+=`<path d="M-27 2 C-30 -44 30 -44 27 2" stroke="#222" stroke-width="4" fill="none"/><rect x="-31" y="-4" width="8" height="15" rx="4" fill="#333"/><rect x="23" y="-4" width="8" height="15" rx="4" fill="#333"/><circle cx="27" cy="3" r="2" fill="#4dd0e1"/>`;
@@ -482,7 +493,7 @@ function head(p,ex,o={}){const id="h"+(UID++),[sk,sd]=SKINS[p.skin]||SKINS["自�
  ${brow(-9)}${brow(9)}${eye(-9,-1,ex,fem,iris)}${eye(9,-1,ex,fem,iris)}
  <path d="M0 0 Q-3 8 -1.5 9.5 Q1 11 3.5 9.5" stroke="${shade(sd,-12)}" stroke-width="1.3" fill="none" stroke-linecap="round"/><path d="M1 1 L1.5 7" stroke="#fff" stroke-width="1" opacity=".35"/>
  <ellipse cx="-13" cy="8" rx="5" ry="3" fill="#ff6b7a" opacity="${fem?.28:.12}"/><ellipse cx="13" cy="8" rx="5" ry="3" fill="#ff6b7a" opacity="${fem?.28:.12}"/>
- ${mouth}${hairFront(p.hair,hc)}${gl}${acc}`}
+ ${mouth}${cryFx}${hairFront(p.hair,hc)}${gl}${acc}`}
 function outfitTorso(p,cx,top,w,col,o={}){const c=col,d=shade(c,-30),l=shade(c,25),fem=p.gender=="女生",hw=w/2,id="t"+(UID++);
  const waist=fem?hw*.82:hw*.95,belly=o.belly||0,L=o.len||120;
  const body=`M${cx-hw} ${top+16} C${cx-hw-2} ${top+4} ${cx-hw+10} ${top} ${cx-12} ${top-2} L${cx+12} ${top-2} C${cx+hw-10} ${top} ${cx+hw+2} ${top+4} ${cx+hw} ${top+16} C${cx+hw+belly} ${top+55} ${cx+waist+belly} ${top+80} ${cx+waist} ${top+L} L${cx-waist} ${top+L} C${cx-waist-belly} ${top+80} ${cx-hw-belly} ${top+55} ${cx-hw} ${top+16}Z`;
@@ -502,10 +513,11 @@ function outfitTorso(p,cx,top,w,col,o={}){const c=col,d=shade(c,-30),l=shade(c,2
  return s}
 function arm(pts,col,w,skin){const d=`M${pts.map(p=>p.join(" ")).join(" Q").replace(/Q([^Q]*) Q/,"Q$1 ")}`;const [sk,sd]=SKINS[skin];const e=pts[pts.length-1];
  return`<path d="${d}" stroke="${shade(col,-45)}" stroke-width="${w+3}" stroke-linecap="round" fill="none"/><path d="${d}" stroke="${col}" stroke-width="${w}" stroke-linecap="round" fill="none"/><path d="${d}" stroke="${shade(col,25)}" stroke-width="${w*.3}" stroke-linecap="round" fill="none" opacity=".45" transform="translate(-1,-2)"/><ellipse cx="${e[0]}" cy="${e[1]}" rx="${w*.55}" ry="${w*.45}" fill="${sk}" stroke="${sd}"/>`}
+function cryEx(){return typeof meter=="undefined"?"cry1":meter<12?"cry3":meter<26?"cry2":"cry1"}
 function drawWorker(){const p=CFG.worker,fem=p.gender=="女生",col=p.outfitColor,w=(fem?62:72)*(p.outfit=="oversized帽T"?1.15:1),sl=p.outfit=="洋裝"?shade(SKINS[p.skin][0],0):col;
  const work=`<g class="work">${outfitTorso(p,335,238,w,col)}
   <g class="handL">${arm([[315,250],[330,290],[392,287]],p.outfit=="洋裝"?SKINS[p.skin][0]:shade(col,-10),fem?10:12,p.skin)}</g>
-  <g transform="translate(337 200) scale(1.08)"><g class="head">${head(p,"down")}</g></g>
+  <g transform="translate(337 200) scale(1.08)"><g class="head" id="whead">${head(p,cryEx())}</g></g>
   <g class="handR">${arm([[358,250],[372,290],[416,284]],sl,fem?10:12,p.skin)}</g></g>`;
  const dream=`<g class="dream"><g transform="rotate(-7 318 330)">${arm([[300,252],[276,214],[306,178]],shade(col,-10),fem?10:12,p.skin)}${outfitTorso(p,318,236,w,col)}
   <g transform="translate(320 196) scale(1.08)"><g class="headD">${head(p,"happy")}</g></g>
@@ -634,7 +646,7 @@ const STAGES=[[20,"班味太重 🧱"],[40,"已讀不回 🐟"],[60,"躺平預�
 let D,meter=0,base=0,busy=false,auto=null;
 const stageOf=m=>STAGES.find(s=>m<s[0])[1];
 function setMeter(m){meter=Math.max(0,Math.min(100,m));$("mf").style.width=meter+"%";$("mv").textContent=meter.toFixed(0)+"%";$("stage").textContent=stageOf(meter);
- const w=$("worker");w.classList.toggle("isWork",meter<40);w.classList.toggle("isDream",meter>=40);
+ const w=$("worker");{const ce=cryEx(),wh=$("whead");if(wh&&wh.dataset.ce!==ce){wh.dataset.ce=ce;wh.innerHTML=head(CFG.worker,ce)}}w.classList.toggle("isWork",meter<40);w.classList.toggle("isDream",meter>=40);
  $("letter").setAttribute("opacity",meter>=60?1:0);$("letter").setAttribute("transform",meter>=60?"translate(0,0)":"translate(0,10)");
  $("box").setAttribute("opacity",meter>=80?1:0);$("papers").setAttribute("opacity",meter>=60?.3:1)}
 function bubble(text,x,y,color){const b=document.createElement("div");b.className="bubble";b.textContent=text;b.style.left=x+"%";b.style.top=y+"%";if(color)b.style.borderColor=b.style.color=color;$("scene").appendChild(b);setTimeout(()=>b.remove(),2600)}
