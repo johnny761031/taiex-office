@@ -116,6 +116,12 @@ header{padding:8px 10px 2px!important}
 .pft{font-size:.8rem}.pft td{padding:4px 3px}.pft a{cursor:pointer}.hmsg{font-size:.78rem;color:#c62828;opacity:.9}.hnote{font-size:.7rem;opacity:.6;margin-top:4px}
 body.dark .pfform input,body.dark .pfform select{background:#2c2533;color:#eee;border-color:#4a3f55}
 @media(max-width:700px){.pfform{grid-template-columns:1fr 1fr 1fr}.pfform button{grid-column:span 1}}
+.tk{padding:8px 0;border-top:1px dashed #e6d5bf}.tsub{font-size:.75rem;opacity:.75;margin-top:3px}.pb{border:0;border-radius:99px;padding:3px 10px;margin-left:4px;font-weight:900;cursor:pointer;background:#f3e5f5}.pb.up{color:#e53935}.pb.down{color:#2e9d4a}
+.vbar{height:8px;border-radius:9px;background:#2e9d4a;overflow:hidden;margin-top:6px}.vbar i{display:block;height:100%;background:linear-gradient(90deg,#fa7e1e,#d62976)}
+.bq{font-weight:900;font-size:.85rem;padding:6px 8px;border-radius:10px;background:#fff3e0;margin:6px 0}.bq.big{background:#ffebee;color:#c62828;animation:shake .5s 2}
+body.dark .bq{background:#2c2533}body.dark .bq.big{background:#3a1a22;color:#ff8a80}body.dark .pb{background:#2c2533}body.dark .tk{border-color:#352d3d}
+@keyframes shake{25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+#tasks h2{margin:0}
 </style></head><body>
 <header><div class="hrow"><div class="ring"><div id="avatar"></div></div><div class="htxt"><h1>上班族<span>離職衝動計</span></h1><div class="handle" id="handle"></div></div><div class="hbtn"><button id="theme" class="ib" title="深色模式">🌙</button><button id="share" class="ib share">📸 分享</button></div></div><div class="sub" id="sub">載入資料中…</div><div class="sample" id="sample">⚠️ 範例資料（非真實行情，資料載入失敗）</div></header>
 <div class="wrap w3">
@@ -190,6 +196,7 @@ body.dark .pfform input,body.dark .pfform select{background:#2c2533;color:#eee;b
 <div id="hmsg" class="hmsg"></div><table class="pft" id="hlist"></table><div class="hnote">🔒 只存在你的瀏覽器｜價格：證交所，≈ 為買賣報價中間價｜僅上市股票</div></details>
 <details class="card fold"><summary>🎨 角色設定</summary><div style="margin:8px 0"><button class="auto sm" id="rand">🎲 隨機</button> <button class="auto sm" id="def" style="background:#a1887f;color:#fff">預設</button></div><div id="panel"></div></details></div></div>
 <div class="rcol">
+ <div class="card" id="tasks"></div>
  <div class="card">
   <div class="idx"><div><div style="opacity:.7">發行量加權股價指數</div><div class="v" id="iv">—</div></div><div class="v" id="ic">—</div></div><div id="pfline" class="pfline" style="display:none"></div>
   <h2 style="margin-top:12px">💭 離職念頭 <small>漲幅前三</small></h2><div class="thoughts" id="thoughts"></div>
@@ -423,8 +430,8 @@ const SKINS={"白皙":["#fde7d6","#e9b99a"],"自然":["#f6d3b3","#d79e78"],"小�
 const HAIRC={"黑色":"#1d1714","深棕":"#4a2f21","栗棕":"#7a4a2a","亞麻金":"#c9a063","酒紅":"#7b2333","灰白":"#b9b6b0","霧藍":"#4f6d8f"};
 const HAIR_W={"男生":["短髮","旁分油頭","刺蝟頭","中長髮"],"女生":["長直髮","馬尾","鮑伯頭","丸子頭","大波浪"]};
 const HAIR_B={"男生":["短髮","旁分油頭","光頭","地中海","刺蝟頭"],"女生":["鮑伯頭","盤髮","長直髮","短髮"]};
-const OUTFITS=["襯衫領帶","大學T","oversized帽T","防風外套","帽T","西裝外套","洋裝","POLO衫"];
-const ACCS=["無","AirPods","頭戴式耳機","缽帽","護身符","識別證","耳環","髮夾"];const DESK=["冰美式","珍奶","熱咖啡","公仔","小風扇"];
+const OUTFITS=["襯衫領帶","大學T","oversized帽T","防風外套","帽T","西裝外套","洋裝","POLO衫","亮片外套","金色西裝"];
+const ACCS=["無","AirPods","頭戴式耳機","缽帽","護身符","識別證","耳環","髮夾"];const DESK=["冰美式","珍奶","熱咖啡","公仔","小風扇","多肉🌵","招財貓🐱","金條💰"];
 const BODY=["瘦","標準","壯碩"];
 const TONES={"嚴厲": ["{w}！不准看盤！", "{w}，報告呢？", "{s}跌了還看？", "考績見！", "切回 Excel！", "年終也會跌喔"], "嘮叨": ["{w}啊，我跟你說…", "人家小陳都不看盤", "我年輕的時候啊…", "{s}跌就是不認真", "報表做完沒？", "唉，現在年輕人…"], "暴怒": ["{w}！！進來！！", "滑什麼手機！！", "{s}崩你也崩？！", "扣考績！！", "會議室！現在！！", "{w}再看試試看！！"], "陰陽怪氣": ["{w}好閒喔～", "股神也要交週報喔～", "{s}研究得不錯嘛～", "報告我自己做就好～", "上班看盤真專業呢～", "原來你本業是股神～"]};
 const DEF={worker:{gender:"女生",hair:"長直髮",hairColor:"深棕",skin:"自然",outfit:"oversized帽T",outfitColor:"#8e7cc3",glasses:false,acc:"AirPods",wname:"小美",wtitle:"資深專員",desk:"珍奶",gchair:true},
@@ -514,7 +521,7 @@ function outfitTorso(p,cx,top,w,col,o={}){const c=col,d=shade(c,-30),l=shade(c,2
 function arm(pts,col,w,skin){const d=`M${pts.map(p=>p.join(" ")).join(" Q").replace(/Q([^Q]*) Q/,"Q$1 ")}`;const [sk,sd]=SKINS[skin];const e=pts[pts.length-1];
  return`<path d="${d}" stroke="${shade(col,-45)}" stroke-width="${w+3}" stroke-linecap="round" fill="none"/><path d="${d}" stroke="${col}" stroke-width="${w}" stroke-linecap="round" fill="none"/><path d="${d}" stroke="${shade(col,25)}" stroke-width="${w*.3}" stroke-linecap="round" fill="none" opacity=".45" transform="translate(-1,-2)"/><ellipse cx="${e[0]}" cy="${e[1]}" rx="${w*.55}" ry="${w*.45}" fill="${sk}" stroke="${sd}"/>`}
 function cryEx(){return typeof meter=="undefined"?"cry1":meter<12?"cry3":meter<26?"cry2":"cry1"}
-function drawWorker(){const p=CFG.worker,fem=p.gender=="女生",col=p.outfitColor,w=(fem?62:72)*(p.outfit=="oversized帽T"?1.15:1),sl=p.outfit=="洋裝"?shade(SKINS[p.skin][0],0):col;
+function drawWorker(){const p=effW(),fem=p.gender=="女生",col=p.outfitColor,w=(fem?62:72)*(p.outfit=="oversized帽T"?1.15:1),sl=p.outfit=="洋裝"?shade(SKINS[p.skin][0],0):col;
  const work=`<g class="work">${outfitTorso(p,335,238,w,col)}
   <g class="handL">${arm([[315,250],[330,290],[392,287]],p.outfit=="洋裝"?SKINS[p.skin][0]:shade(col,-10),fem?10:12,p.skin)}</g>
   <g transform="translate(337 200) scale(1.08)"><g class="head" id="whead">${head(p,cryEx())}</g></g>
@@ -540,7 +547,7 @@ function drawPlate(){const n=esc(WN()),t=esc(CFG.worker.wtitle||"");
  <path d="M508 268 L520 268 L512 291 L504 291Z" fill="#fff" opacity=".5"/><rect x="512" y="270" width="58" height="2.5" fill="#c62828" opacity=".8"/>
  <text x="541" y="284" text-anchor="middle" font-size="${n.length>4?10:12}" font-weight="900" fill="#263238" font-family="'Noto Serif TC','PMingLiU',serif">${n}</text>
  <text x="541" y="291" text-anchor="middle" font-size="5.5" fill="#546e7a">${t}</text></g>`}
-function drawDesk(){const it=CFG.worker.desk||"熱咖啡";let s="";
+function drawDesk(){const it=effW().desk||"熱咖啡";let s="";if(/[🌵🐱💰]/u.test(it))s=`<text x="248" y="299" text-anchor="middle" font-size="34">${[...it].pop()}</text>`;
  if(it=="熱咖啡")s=`<g filter="url(#sh)"><path d="M232 270 h30 l-3 30 h-24Z" fill="#fff" stroke="#8a5a3a" stroke-width="2"/><path d="M262 276 q12 2 0 16" stroke="#8a5a3a" stroke-width="3" fill="none"/><rect x="236" y="280" width="22" height="6" fill="#6d4c41"/><text x="247" y="296" text-anchor="middle" font-size="7" fill="#6d4c41">續命</text></g><g class="steam" stroke="#9e9e9e" stroke-width="2" fill="none"><path d="M240 265 q-4 -8 0 -14 q4 -6 0 -12"/><path d="M248 265 q-4 -8 0 -14 q4 -6 0 -12"/><path d="M256 265 q-4 -8 0 -14 q4 -6 0 -12"/></g>`;
  if(it=="冰美式")s=`<g filter="url(#sh)"><path d="M234 262 h28 l-4 38 h-20Z" fill="#ffffffaa" stroke="#90a4ae" stroke-width="1.5"/><path d="M236 272 h24 l-3 26 h-18Z" fill="#3e2723" opacity=".85"/><rect x="240" y="276" width="7" height="7" fill="#e0f7fa" opacity=".8" transform="rotate(15 243 279)"/><rect x="249" y="284" width="7" height="7" fill="#e0f7fa" opacity=".7"/><path d="M252 262 l6 -18" stroke="#2e7d32" stroke-width="3"/><text x="248" y="296" text-anchor="middle" font-size="6" fill="#fff">ICE</text></g>`;
  if(it=="珍奶")s=`<g filter="url(#sh)"><path d="M232 260 h32 l-4 40 h-24Z" fill="#ffffffaa" stroke="#90a4ae" stroke-width="1.5"/><path d="M234 268 h28 l-3 32 h-22Z" fill="#d7b48c"/>${[0,1,2,3,4,5].map(k=>`<circle cx="${239+k%3*8}" cy="${292+Math.floor(k/3)*5}" r="2.6" fill="#3e2723"/>`).join("")}<path d="M232 260 Q248 252 264 260" fill="#fff" stroke="#90a4ae"/><path d="M252 258 l4 -20" stroke="#ff7043" stroke-width="4"/><text x="248" y="282" text-anchor="middle" font-size="6.5" fill="#5d4037" font-weight="bold">半糖少冰</text></g>`;
@@ -573,7 +580,7 @@ async function shareImg(){const cv=await makeShare();const blob=await new Promis
  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="離職衝動值.png";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),5000)}
 function drawAll(){drawDesk();drawAvatar();drawWorker();drawBoss();drawPlate();localStorage.setItem("officeCfg",JSON.stringify(CFG))}
 /* ===== 設定面板 ===== */
-function opt(list,v){return list.map(x=>`<option ${x==v?"selected":""}>${x}</option>`).join("")}
+function opt(list,v){return list.map(x=>{const u=typeof UNL!="undefined"&&UNL.find(y=>y.n==x),lk=u&&!unlocked(x);return `<option value="${x}" ${x==v?"selected":""} ${lk?"disabled":""}>${lk?`🔒${x}（${u.d}天）`:x}</option>`}).join("")}
 function buildPanel(){const w=CFG.worker,b=CFG.boss;
  const row=(l,h)=>`<label><span>${l}</span>${h}</label>`;
  const sel=(who,k,list)=>`<select data-who="${who}" data-k="${k}">${opt(list,CFG[who][k])}</select>`;
@@ -586,7 +593,7 @@ function buildPanel(){const w=CFG.worker,b=CFG.boss;
   drawAll()}))}
 function randomize(){const r=a=>a[Math.floor(Math.random()*a.length)],rc=()=>"#"+[0,0,0].map(()=>Math.floor(40+Math.random()*170).toString(16).padStart(2,"0")).join("");
  const wg=r(["男生","女生"]),bg=r(["男生","女生"]);
- CFG.worker={gender:wg,hair:r(HAIR_W[wg]),hairColor:r(Object.keys(HAIRC)),skin:r(Object.keys(SKINS)),outfit:r(wg=="男生"?OUTFITS.filter(o=>o!="洋裝"):OUTFITS),outfitColor:rc(),glasses:Math.random()<.4,acc:r(ACCS),desk:r(DESK),gchair:Math.random()<.5,wname:r(wg=="男生"?["小明","阿凱","志豪","建宏","冠宇"]:["小美","雅婷","怡君","佳穎","欣妤"]),wtitle:r(["資深專員","行銷企劃","工程師","PM","業務代表","會計","實習生",""])};
+ CFG.worker={gender:wg,hair:r(HAIR_W[wg]),hairColor:r(Object.keys(HAIRC)),skin:r(Object.keys(SKINS)),outfit:r(OUTFITS.filter(o=>unlocked(o)&&(wg!="男生"||o!="洋裝"))),outfitColor:rc(),glasses:Math.random()<.4,acc:r(ACCS),desk:r(DESK.filter(unlocked)),gchair:Math.random()<.5,wname:r(wg=="男生"?["小明","阿凱","志豪","建宏","冠宇"]:["小美","雅婷","怡君","佳穎","欣妤"]),wtitle:r(["資深專員","行銷企劃","工程師","PM","業務代表","會計","實習生",""])};
  CFG.boss={...CFG.boss,gender:bg,hair:r(HAIR_B[bg]),hairColor:r(Object.keys(HAIRC)),skin:r(Object.keys(SKINS)),suit:rc(),glasses:Math.random()<.5,body:r(BODY),tone:r(Object.keys(TONES)),surname:r(["王","陳","林","張","李","黃","吳","劉"]),given:r(bg=="男生"?["大同","建國","志明","國華",""]:["淑芬","美玲","雅惠","秀英",""]),btitle:r(["經理","總監","協理","副總","董事長","主任","課長"])};
  buildPanel();drawAll();log("🎲 換了個造型，今天的我煥然一新（但還是要上班）")}
 
@@ -614,6 +621,63 @@ function like(el,s){const n=s.short;
  if(!liked(n)){try{localStorage.setItem("lk:"+n,lday())}catch(e){}LIKE[n]=(LIKE[n]||0)+1;lshow(n);
   fetch(AB+"/hit/"+NS+"/"+lkey(n)).then(r=>r.json()).then(j=>{if(typeof j.value=="number"){LIKE[n]=j.value;LKT[n]=Date.now();lshow(n)}}).catch(()=>{})}
  for(let i=0;i<5;i++){const h=document.createElement("i");h.className="heart";h.textContent=["❤️","💖","🔥","😂","👍"][i];h.style.left=(30+Math.random()*40)+"%";h.style.animationDelay=i*.08+"s";el.appendChild(h);setTimeout(()=>h.remove(),1400)}}
+/* ===== 黏著度功能 ===== */
+const TPN=()=>new Date(Date.now()+8*36e5),dstr=d=>d.toISOString().slice(0,10),addD=(s,n)=>dstr(new Date(Date.parse(s)+n*864e5));
+const nextWD=s=>{let d=s;do{d=addD(d,1)}while([0,6].includes(new Date(d).getUTCDay()));return d};
+const isWD=s=>![0,6].includes(new Date(s).getUTCDay());
+const LS={g:(k,d)=>{try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},s:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+// 連續打卡
+const UNL=[{d:3,t:"desk",n:"多肉🌵"},{d:7,t:"outfit",n:"亮片外套"},{d:14,t:"desk",n:"招財貓🐱"},{d:30,t:"outfit",n:"金色西裝"},{d:30,t:"desk",n:"金條💰"}];
+const OALIAS={"亮片外套":["防風外套","#ff2fa0"],"金色西裝":["西裝外套","#d4af37"]};
+let VIS=LS.g("visit",{last:"",n:0,best:0});
+(function(){const t=dstr(TPN());if(VIS.last!==t){VIS.n=VIS.last===addD(t,-1)?VIS.n+1:1;VIS.last=t;VIS.best=Math.max(VIS.best,VIS.n);LS.s("visit",VIS);VIS.fresh=1}})();
+const unlocked=n=>{const u=UNL.find(x=>x.n==n);return !u||VIS.best>=u.d};
+const nextUnl=()=>UNL.find(x=>VIS.best<x.d);
+// 每日預測
+let PRED=LS.g("pred",{date:"",g:"",win:0,best:0,last:null});
+function predTarget(){const n=TPN(),t=dstr(n),m=n.getUTCHours()*60+n.getUTCMinutes();if(isWD(t)&&m<540)return {d:t,open:true};return {d:nextWD(t),open:true,today:t,m}}
+function predResolve(){if(!PRED.g||!D||D.isSample)return;const n=TPN(),m=n.getUTCHours()*60+n.getUTCMinutes();
+ if(D.date===PRED.date&&D.mode=="收盤"&&(dstr(n)>PRED.date||m>=810)){const r=D.index.pct>=0?"up":"down",ok=r==PRED.g;PRED.win=ok?PRED.win+1:0;PRED.best=Math.max(PRED.best,PRED.win);PRED.last={date:PRED.date,g:PRED.g,r,ok,pct:D.index.pct};PRED.g="";LS.s("pred",PRED);log(ok?`🔮 猜中了！連勝 ${PRED.win} 🔥`:`🔮 猜錯 QQ 連勝歸零`,"預言家")}
+ else if(D.date>PRED.date&&D.mode=="收盤"){PRED.g="";LS.s("pred",PRED)}}
+function predUI(){const T=predTarget(),gl=PRED.g&&PRED.date>=dstr(TPN())?PRED.g:"",when=T.d==dstr(TPN())?"今天":T.d.slice(5).replace("-","/");
+ let h=`<div class="tk"><b>🔮 ${when}收盤</b>`;
+ if(gl)h+=` 已猜 <b class="${gl=="up"?"up":"down"}">${gl=="up"?"漲📈":"跌📉"}</b> <small>${PRED.date==dstr(TPN())?"13:30 揭曉":"等開獎"}</small>`;
+ else h+=` <button class="pb up" data-g="up">漲📈</button><button class="pb down" data-g="down">跌📉</button> <small>09:00 前</small>`;
+ h+=`<div class="tsub">連勝 <b>${PRED.win}</b>｜最佳 ${PRED.best}${PRED.last?`｜上次 ${PRED.last.ok?"✅":"❌"}`:""}</div></div>`;return h}
+function predGo(g){const T=predTarget();PRED.date=T.d;PRED.g=g;LS.s("pred",PRED);log(`🔮 押${g=="up"?"漲":"跌"}，${T.d.slice(5)} 見真章`);tasks()}
+// 全站投票
+const VT={q:0,s:0};let vtT=0;const vday=()=>dstr(TPN()).replace(/-/g,""),vk=c=>"v"+vday()+c;
+function vfetch(){if(Date.now()-vtT<3e4)return;vtT=Date.now();["q","s"].forEach(c=>fetch(AB+"/get/"+NS+"/"+vk(c)).then(r=>r.status==404?{value:0}:r.json()).then(j=>{if(typeof j.value=="number"&&j.value>=VT[c]){VT[c]=j.value;tasks()}}).catch(()=>{}))}
+function vote(c){if(LS.g("vt","")==vday())return;LS.s("vt",vday());VT[c]++;tasks();log(c=="q"?"🗳️ 投了：想離職 🏃":"🗳️ 投了：忍耐 🧘");
+ fetch(AB+"/hit/"+NS+"/"+vk(c)).then(r=>r.json()).then(j=>{if(typeof j.value=="number"){VT[c]=j.value;tasks()}}).catch(()=>{})}
+const vpct=()=>{const t=VT.q+VT.s;return t?Math.round(VT.q*100/t):50};
+function voteUI(){const my=LS.g("vt","")==vday(),t=VT.q+VT.s,p=vpct();
+ return `<div class="tk"><b>🗳️ 全站：今天想…</b> ${my?"":`<button class="pb up" data-v="q">離職🏃</button><button class="pb down" data-v="s">忍耐🧘</button>`}
+ <div class="vbar"><i style="width:${p}%"></i></div><div class="tsub">離職 ${p}%｜忍耐 ${100-p}%｜${t} 票${my?" ✔":""}</div></div>`}
+// 老闆語錄
+const QUOTES=["薪水是給你上班，不是看盤","我看到你螢幕是綠的","今天先把 KPI 漲停","會議 5 分鐘後，帶腦","你的手機比工作還認真","摸魚也要有績效","報告呢？我說的是昨天那份","年輕人要多吃苦","公司是一個大家庭（加班）","你這進度跟大盤一樣","下班前給我，謝謝","我不是針對你，是全部","這個很簡單，明天交","彈性上班＝隨時上班","你是不是又在看 Threads","這週末有空嗎？","我們不談錢，談夢想","Excel 開著不代表在工作","一樣的錯不要犯第三次","主動一點，責任制喔","客戶說要再改一版","你的熱情呢？","公司給你舞台了","我年輕的時候一天睡三小時","加薪？先看看大環境","績效面談約一下","這不難吧？","你先做，有問題再說","午休不要太久","我們要 all in","效率！效率！","你今天氣色很適合加班","目標是對的，你錯了","先別下班，等我一下","資源有限，創意無限","有空來我辦公室一下","這月業績靠你了","不要只看短期，看長期（加班）","你是公司最重要的螺絲","再想想，明天給我三個方案"];
+const QBIG=["大盤崩了你還笑得出來？","今天誰敢提離職試試看","股票套牢，你被我套牢","跌成這樣，年終先別想","綠成這樣，全員加班"];
+function bossQuote(){const n=Math.floor(Date.parse(dstr(TPN()))/864e5),big=D&&D.index&&D.index.pct<-1.5;return {big,t:big?QBIG[n%QBIG.length]:QUOTES[(n*7)%QUOTES.length]}}
+function streakUI(){const nx=nextUnl();return `<div class="tk"><b>📅 連續打卡 ${VIS.n} 天</b><div class="tsub">${nx?`再 ${nx.d-VIS.best} 天解鎖 ${nx.n}`:"全部解鎖 👑"}｜最佳 ${VIS.best}</div></div>`}
+function tasks(){const e=$("tasks");if(!e||!D)return;const q=bossQuote();
+ e.innerHTML=`<h2>🎯 每日任務</h2><div class="bq${q.big?" big":""}">👔 ${esc(BN())}：「${esc(q.t)}」${q.big?" 🚨":""}</div>${predUI()}${voteUI()}${streakUI()}<button class="auto" id="rpt" style="width:100%;margin-top:6px">📸 今日社畜成績單</button>`;
+ e.querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>predGo(b.dataset.g));e.querySelectorAll("[data-v]").forEach(b=>b.onclick=()=>vote(b.dataset.v));$("rpt").onclick=shareReport}
+// 收盤成績單
+async function makeReport(){const W=1080,H=1350,cv=document.createElement("canvas");cv.width=W;cv.height=H;const c=cv.getContext("2d"),F='"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif';
+ const g=c.createLinearGradient(0,0,W,H);g.addColorStop(0,"#1b1424");g.addColorStop(1,"#3a1530");c.fillStyle=g;c.fillRect(0,0,W,H);
+ const p=D.index.pct,cry=p<0?(p<-1.5?"cry3":p<-.5?"cry2":"cry1"):"happy";
+ const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="-34 -44 68 76" width="300" height="335">${head(CFG.worker,cry)}</svg>`;const img=new Image();await new Promise(r=>{img.onload=r;img.onerror=r;img.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg)});
+ c.textAlign="center";c.fillStyle="#f0b37e";c.font=`900 76px ${F}`;c.fillText("今日社畜指數",540,130);c.fillStyle="#bbb";c.font=`36px ${F}`;c.fillText(`${D.date}｜@${WN()}`,540,190);
+ try{c.drawImage(img,390,210,300,335)}catch(e){}
+ const idx=Math.round(100-meter);c.font=`900 180px ${F}`;const mg=c.createLinearGradient(300,0,780,0);mg.addColorStop(0,"#fa7e1e");mg.addColorStop(1,"#d62976");c.fillStyle=mg;c.fillText(idx,540,720);
+ c.fillStyle="#fff";c.font=`bold 50px ${F}`;c.fillText(p<-1.5?"破防大哭 😭":p<0?"含淚搬磚 🥲":p<1?"假笑上班 🙂":"想離職了 🏃",540,800);
+ const rows=[[`加權 ${fmt(D.index.close,0)}`,`${sg(p)}%`,p>=0?"#ff6b6b":"#4cdc6a"],["🔥 離職衝動",meter.toFixed(0)+"%","#fff"],["📅 連續打卡",VIS.n+" 天","#fff"],["🔮 預測連勝",PRED.win+" 連勝","#fff"],["🗳️ 全站想離職",vpct()+"%","#fff"]];
+ rows.forEach((r,k)=>{const y=890+k*72;c.textAlign="left";c.fillStyle="#ddd";c.font=`bold 44px ${F}`;c.fillText(r[0],160,y);c.textAlign="right";c.fillStyle=r[2];c.fillText(r[1],920,y)});
+ c.textAlign="center";c.fillStyle="#d62976";c.font=`bold 34px ${F}`;c.fillText("johnny761031.github.io/taiex-office",540,1290);return cv}
+async function shareReport(){const cv=await makeReport();const blob=await new Promise(r=>cv.toBlob(r,"image/png"));const f=new File([blob],"今日社畜指數.png",{type:"image/png"});
+ try{if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:"今日社畜指數"});return}}catch(e){if(e.name=="AbortError")return}
+ const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=f.name;a.click()}
+function effW(){let p={...CFG.worker};if(!unlocked(p.outfit))p.outfit="帽T";if(!unlocked(p.desk))p.desk="熱咖啡";const a=OALIAS[p.outfit];if(a){p.outfit=a[0];p.outfitColor=a[1]}return p}
 function log(t,who){who=who||WN();const d=document.createElement("div");d.className="post";const tm=new Date().toLocaleTimeString("zh-TW",{hour:"2-digit",minute:"2-digit",hour12:false});
  const boss=who==BN(),mkt=who=="大盤";d.innerHTML=`<div class="pav ${boss?"b":mkt?"m":""}">${esc(who.slice(0,1))}</div><div class="pbody"><div class="phead"><b>${esc(who)}</b>${boss?'<span class="tag">老闆</span>':''} <span class="tm">${tm}</span></div><div>${t}</div><div class="pact">♡ 💬 ↻</div></div>`;$("log").prepend(d)}
 let liveOff=0,SHA=null;
@@ -685,8 +749,9 @@ function render(upd,oldBase){PF=calcPF();const i=D.index,p=PF?PF.dayPct:i.pct;if
  const mx=Math.max(...D.sectors.map(s=>Math.abs(s.pct)),.01);
  $("tbl").innerHTML=`<tr><th class="t">#</th><th class="t">類股</th><th class="t">效果</th><th class="t">指數</th><th class="t">漲跌%</th><th class="t"></th></tr>`+D.sectors.map((s,k)=>`<tr class="row ${k<3?"top":""}" data-k="${k}"><td>${k+1}</td><td>${nm(s)}</td><td>${s.pct>0?`+${(s.pct*10).toFixed(0)}`:s.pct<0?"👔":"—"}</td><td class="n">${fmt(s.close)}</td><td class="n ${cls(s.pct)}">${sg(s.pct)}%</td><td><span class="bw" style="width:${Math.abs(s.pct)/mx*120}px;background:${s.pct>=0?"#e53935":"#2e9d4a"}"></span></td></tr>`).join("");
  document.querySelectorAll("tr.row").forEach(e=>e.onclick=()=>trigger(D.sectors[+e.dataset.k]));
- $("rule").innerHTML=`<div class="howto"><b>🎮 玩法</b><ul><li>🔥 衝動值＝今天大盤漲跌，開盤即時起跳</li><li>💭 點離職念頭 → 衝動值↑（60% 辭呈、80% 打包）</li><li>😮‍💨 點忍耐理由或左表下跌類股 → 老闆開罵、衝動值↓</li><li>💼 加庫存 → 改看你自己的股票</li><li>▶ 自動看戲｜↺ 重來</li><li>🎨 換造型｜🌙 深色｜📸 分享限動</li><li>📡 盤中約每分鐘自動更新</li></ul></div><div class="rmore">衝動值 = 50% + 加權漲跌% × 20（0–100%）。今日 <span class="${cls(p)}">${sg(p)}%</span> → ${base.toFixed(0)}%。<br>漲的類股：+漲幅×10；跌的類股：老闆出現，−跌幅×10。<br>≥60 寫辭呈，≥80 打包。紅漲綠跌，螢幕 K 線為示意。<br>來源：${esc(D.source)}${D.note?"。"+esc(D.note):""}</div>`;
+ $("rule").innerHTML=`<div class="howto"><b>🎮 玩法</b><ul><li>🔥 衝動值＝今天大盤漲跌，開盤即時起跳</li><li>💭 點離職念頭 → 衝動值↑（60% 辭呈、80% 打包）</li><li>😮‍💨 點忍耐理由或左表下跌類股 → 老闆開罵、衝動值↓</li><li>💼 加庫存 → 改看你自己的股票</li><li>▶ 自動看戲｜↺ 重來</li><li>🎨 換造型｜🌙 深色｜📸 分享限動</li><li>🔮 09:00 前猜漲跌，收盤開獎拚連勝</li><li>🗳️ 每天投一票：離職 or 忍耐</li><li>📅 連續打卡 3/7/14/30 天解鎖新造型</li><li>📸 收盤後領社畜成績單</li><li>📡 盤中約每分鐘自動更新</li></ul></div><div class="rmore">衝動值 = 50% + 加權漲跌% × 20（0–100%）。今日 <span class="${cls(p)}">${sg(p)}%</span> → ${base.toFixed(0)}%。<br>漲的類股：+漲幅×10；跌的類股：老闆出現，−跌幅×10。<br>≥60 寫辭呈，≥80 打包。紅漲綠跌，螢幕 K 線為示意。<br>來源：${esc(D.source)}${D.note?"。"+esc(D.note):""}</div>`;
  $("foot").innerHTML=`資料：證交所｜純屬娛樂，非投資建議`;
+predResolve();tasks();vfetch();
 if(!upd) log(`早安，班味已上身 ☕ 衝動值 <b>${base.toFixed(0)}%</b>`);
  if(PF&&(!upd||oldBase!==base)){log(`💼 我的庫存 <span class="${cls(PF.dayPct)}">${sg(PF.dayPct)}%</span>${PF.dayPct>=3?"，紙箱準備好了 📦":PF.dayPct<=-3?"，破防…繼續搬磚":""}`);if(PF.dayPct<=-3&&dn.length)setTimeout(()=>trigger(dn[0]),1200)}}
 $("auto").onclick=()=>{if(auto){clearInterval(auto);auto=null;$("auto").textContent="▶ 自動";return}$("auto").textContent="⏸ 停止";
@@ -697,6 +762,7 @@ buildPanel();drawAll();$("rand").onclick=randomize;$("def").onclick=()=>{CFG=JSO
 (function(){const st=localStorage.getItem("officeTheme");const dark=st?st=="dark":matchMedia("(prefers-color-scheme: dark)").matches;setTheme(dark)})();
 $("theme").onclick=()=>{const d=!document.body.classList.contains("dark");setTheme(d);localStorage.setItem("officeTheme",d?"dark":"light")};
 $("share").onclick=shareImg;
+if(VIS.fresh){const u=UNL.filter(x=>x.d==VIS.n);setTimeout(()=>log(`📅 打卡第 ${VIS.n} 天${u.length?"，解鎖 "+u.map(x=>x.n).join("、")+" 🎉":""}`),400)}setInterval(()=>{vfetch();tasks()},60000);
 if(innerWidth>700)$("tdet").open=true;
 $("hadd").onclick=addHold;$("hp").addEventListener("keydown",e=>{if(e.key=="Enter")addHold()});
 Promise.all([load(),fetchStocks()]).then(([d,sj])=>{STK=sj;drawHold();D=d;render();setTimeout(()=>trigger(D.sectors[0]),900);if(location.protocol.startsWith("http")){setInterval(poll,30000);document.addEventListener("visibilitychange",()=>{if(!document.hidden)poll()})}setInterval(stamp,30000)});
